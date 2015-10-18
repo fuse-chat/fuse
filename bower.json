@@ -1,0 +1,27 @@
+{
+  "name": "fuse",
+  "description": "Geolocation + group based chat",
+  "main": "",
+  "authors": [
+    "Fuse"
+  ],
+  "license": "---",
+  "keywords": [
+    "chat",
+    "group",
+    "geolocation"
+  ],
+  "homepage": "https://github.com/fuse-chat/fuse",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "toolbelt": "*",
+    "underscore": "~1.8.3"
+  }
+}
