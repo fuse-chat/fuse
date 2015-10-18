@@ -14,11 +14,12 @@ $ nvm alias default 4.2.1
 ````
 
 * Install bower (`npm install -g bower`) for getting front-end components easily
-* Install bower (`npm install -g nodemon`) for reloading node app's automatically on changes
+* Install nodemon (`npm install -g nodemon`) for reloading node apps automatically on changes
+* Install the Less CSS compiler (`npm install -g lessc`) for compiling `.less` to `.css` manually, if needed sometimes.
 
 # Running locally
 
-* Clone the repo `git clone git@github.com:fuse-chat/fuse.git`
-* Switch to the root of the project by typing `cd fuse`
-* Run `npm install` and `bower install`
+* Clone the repo `git clone git@github.com:fuse-chat/fuse.git` and switch to the root of the project
+* Run `npm install` and `bower install` to install dependencies
 * Run `nodemon app.js` to start the server locally!
+* Visit `localhost:3000` in your browser
