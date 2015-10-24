@@ -21,5 +21,5 @@ $ nvm alias default 4.2.1
 
 * Clone the repo `git clone git@github.com:fuse-chat/fuse.git` and switch to the root of the project
 * Run `npm install` and `bower install` to install dependencies
-* Run `nodemon app.js` to start the server locally!
+* Run nodemon with the harmony flag (allows ES6 features) `nodemon --harmony app.js` to start the server locally!
 * Visit `localhost:3000` in your browser
