@@ -57,9 +57,9 @@ Group.addUsers = function(users) {
     }
 
     users.filter(function(user) {
-        return !this.users.has(user.id);
+        return !this.userMap.has(user.id);
     }).forEach(function(user) {
-        this.users.set(user.id, user);
+        this.userMap.set(user.id, user);
     });
 };
 
