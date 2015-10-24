@@ -1,23 +1,21 @@
-var express = require('express')
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+// node module requires
+const express = require('express')
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var app = express();
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var groups = require('./routes/api/1/groups');
-
-// view engine setup
+// view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+// middleware
+// see: http://expressjs.com/guide/using-middleware.html
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,22 +24,11 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
-io.on('connection', function(socket) {
-  socket.on('chat message', function(msg) {
-    console.log('message: ' + msg);
-  });
-});
+// main routes
+app.use('/', require('./routes/index'));
+app.use('/api/1/groups', require('./routes/api/1/groups'));
 
-io.on('connection', function(socket) {
-  socket.on('chat message', function(msg) {
-    io.emit('chat message', msg);
-  });
-});
-
-app.use('/', routes);
-app.use('/users', users);
-app.use('/api/1/groups', groups);
-
+// if none of routes above match
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -73,8 +60,23 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// export app in case other files want to use it
 module.exports = app;
 
+// socket.io events
+io.on('connection', function(socket) {
+  socket.on('chat message', function(obj) {
+    console.log('message: ' + obj.message.body);
+  });
+});
+
+io.on('connection', function(socket) {
+  socket.on('chat message', function(obj) {
+    io.emit('chat message', obj);
+  });
+});
+
+// start the server
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
