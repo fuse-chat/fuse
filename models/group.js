@@ -70,7 +70,7 @@ Group.addUsers = function(users) {
  * @return {number}
  */
 Group.addMessages = function(messages) {
-    if (Array.isArray(messages)) {
+    if (!Array.isArray(messages)) {
         messages = [messages];
     }
 
