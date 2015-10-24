@@ -4,47 +4,24 @@
         <title>{{title}}</title>
         <link rel="stylesheet" href="/stylesheets/yeti.css" />
         <link rel="stylesheet" href="/stylesheets/style.css" />
+        <link rel="import" href="/components/top-navbar.html">
     </head>
     <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Brand</a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                        <li><a href="" data-toggle="modal" data-target=".modal#fc-create-group">Create group</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Link</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <top-navbar></top-navbar>
+
         {{{body}}}
+
+        {{!-- javascript includes --}}
+        {{!-- jquery and bootstrap --}}
         <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        {{!-- web components polyfill --}}
+        <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+        {{!-- helpers lib --}}
         <script type="text/javascript" src="/javascripts/helpers/toolbelt.js"></script>
+        {{!-- socketio --}}
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        {{!-- main javascript file --}}
         <script type="text/javascript" src="/javascripts/main.js"></script>
     </body>
 </html>
