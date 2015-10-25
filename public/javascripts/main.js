@@ -1,48 +1,40 @@
-var DEBUG = true;
+// client side
+// main.js
+// - create the global defines object
+// - routing using page.js
+// - more TODO as we go along
 
-var createGroup = function(params) {
-    var defaultParams = {
-        name: null,
-        description: null
-    };
+// This is guranteed to be the first to be executed from our js files, 
+// as long as the other js files are loaded after
 
-    var params = toolbelt.base.normalize(params, defaultParams);
+const main = {};
 
-    var handleResponse = function(data) {
-        console.log(data);
-    };
+// a global to share common stuff
+main.defines = Object.create(null);
+window.defines = main.defines;
 
-    $.post('/api/1/groups', {
-        name: name
-    }, handleResponse);
+defines['socket-group-created'] = 'group created';
+defines['socket-group-deleted'] = 'group deleted';
+defines['socket-chat-message'] = 'chat message';
+
+defines.API_VERSION = '1';
+defines.DEBUG = true;
+defines.socket = io();
+
+// TODO: This part will be used to fetch the messages for the current group url
+// from the server. Eventually, the code should be moved to router.js and chat.js
+
+var path = document.location && document.location.pathname;
+var pathComponents = path.split(/\//).filter(function(c) {
+    return !_.isEmpty(c);
+});
+
+if (pathComponents[0] === 'group') {
+    var groupName = pathComponents[1];
+    console.log(groupName);
+    
+    $.get('/api/1/groups/' + groupName, {
+        name: groupName
+    }, function(d) { console.log(d); });
 };
 
-var start = function() {
-    var socket = io();
-
-    var form = document.querySelector('form#fc-message-form');
-    var messageInput = document.querySelector('#fc-m');
-    var messages = document.querySelector('#fc-messages');
-    console.log(form, messages, messageInput)
-    var createGroupModal = document.querySelector('.modal#fc-create-group');
-    var createGroupButton = createGroupModal.querySelector('.fc-create');
-
-    form.addEventListener('submit', function(e) {
-        socket.emit('chat message', { message: { body: messageInput.value } });
-        messageInput.value = '';
-        return toolbelt.event.stop(e);
-    });
-
-    socket.on('chat message', function(obj) {
-        var li = document.createElement('li');
-        li.textContent = obj.message.body;
-        messages.appendChild(li);
-    });
-
-    createGroupButton.addEventListener('click', function(e) {
-        var name = createGroupModal.querySelector('input.fc-group-name').value;
-        createGroup(name);
-    });
-};
-
-document.addEventListener('DOMContentLoaded', start);

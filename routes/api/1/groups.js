@@ -1,11 +1,26 @@
-var app_root_path = require('app-root-path').path;
-var Group = require(app_root_path + '/models/group.js');
-var express = require('express');
-var router = express.Router();
+const app_root_path = require('app-root-path').path;
+const defines = require(app_root_path + '/defines');
+const Group = require(app_root_path + '/models/group.js');
+const express = require('express');
+const router = express.Router();
 
-var mongo = require('mongoskin');
-var db = mongo.db('mongodb://localhost:27017/fuse');
-var groupsdb = db.collection('groups');
+const mongo = require('mongoskin');
+const db = mongo.db('mongodb://localhost:27017/fuse');
+const groupsdb = db.collection('groups');
+
+/**
+ * Get board by name
+ */
+router.get('/:name', function(req, res) {
+    var name = req.params.name;
+    groupsdb.findOne({name: name}, function(err, items) {
+        if (err) {
+            throw err;
+        }
+
+        res.json(items);
+    });
+});
 
 /**
  * Create a group
@@ -24,11 +39,15 @@ router.post('/', function(req, res) {
 
     // save group to database here
 	groupsdb.insert(group, function(err, result) {
-	    if (err) throw err;
-	    if (result) console.log('Added!');
-	});
+	    if (err) {
+            throw err;
+        }
 
-    res.send('unimplemented!');
+	    if (result) {
+            req.io.sockets.emit(defines['socket-group-created'], result.ops[0].name);
+            res.json(result);
+        }
+	});
 });
 
 /**
@@ -42,7 +61,11 @@ router.delete('/', function(req, res) {
 
     // find group by id in database and remove it
 	groupsdb.remove({_id: id}, function(err, result) { //does not work. Use name instead?
-	    if (!err) console.log('Deleted!');
+	    if (err) {
+            throw err;
+        }
+
+        req.io.emit('group deleted', id);
 	});
 
     res.send('unimplemented!')

@@ -21,6 +21,10 @@
   ],
   "dependencies": {
     "toolbelt": "*",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5",
+    "webcomponentsjs": "~0.7.15",
+    "jquery-methodOverride": "*"
   }
 }

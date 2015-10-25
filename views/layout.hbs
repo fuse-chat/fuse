@@ -11,9 +11,6 @@
         <link rel="stylesheet" href="/stylesheets/main.css" />
         {{!-- component includes --}}
         <link rel="import" href="/components/top-navbar.html">
-        <link rel="import" href="/components/group-list.html">
-        <link rel="import" href="/components/chat/chat-messages.html">
-        <link rel="import" href="/components/chat/chat-input.html">
         <link rel="import" href="/components/modals/modal-create-group.html">
         {{!-- html page title, can be set by params from a res.render(..) call --}}
         <title>{{title}}</title>
@@ -28,6 +25,8 @@
         {{!-- jquery and bootstrap --}}
         <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        {{!-- lodash --}}
+        <script type="text/javascript" src="/bower_components/lodash/lodash.js"></script>
         {{!-- web components polyfill --}}
         <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
         {{!-- helpers lib --}}
@@ -36,5 +35,9 @@
         <script src="//cdn.socket.io/socket.io-1.2.0.js"></script>
         {{!-- main javascript file --}}
         <script type="text/javascript" src="/javascripts/main.js"></script>
+        <script type="text/javascript" src="/javascripts/chat.js"></script>
+        <script type="text/javascript" src="/javascripts/group.js"></script>
     </body>
 </html>
+
+

@@ -1,13 +1,83 @@
-<top-navbar></top-navbar>
-
-<div class="fc-main-container">
-    <div class="fc-sidebar">
-        <group-list></group-list>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <i class="fa fa-map-pin"></i>
+                Fuse
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+            <ul class="nav navbar-nav">
+                <li><a href="" data-toggle="modal" data-target=".modal#fc-create-group">
+                    <i class="fa fa-plus"></i>
+                    Create group
+                </a></li>
+                <!-- <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">
+                    <i class="fa fa-bell"></i>
+                </a></li>
+                <li><a href="#">
+                    <i class="fa fa-cog"></i>
+                    Preferences
+                </a></li>
+            </ul>
+        </div>
     </div>
+</nav>
+
+<div class="fc-main-container">  
+    {{!-- left side sidebar --}}
+    <div class="fc-sidebar">
+        {{!-- the list of groups inside the sidebar; will be filled using JS --}}
+        <ul class="fc-group-list"></ul>
+    </div>
+    {{!-- the right side chat view --}}
     <div class="fc-chat-view">
-        <chat-messages></chat-messages>
-        <chat-input></chat-input>
+        {{!-- the list of messages --}}
+        <ul id="fc-messages"></ul>
+        {{!-- the area to type new messages into --}}
+        <div class="chat-input">
+            <form action="" id="fc-message-form">
+              <input id="fc-m" autocomplete="off" /><button class="btn btn-primary">Send</button>
+            </form>
+        </div>
     </div>
 </div>
 
-<modal-create-group></modal-create-group>
+{{!-- the create group modal --}}
+<div class="modal" id="fc-create-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="form-group">
+                <input class="form-control fc-group-name" type="text" placeholder="Group name">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default fc-cancel" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary fc-create" data-dismiss="modal">Create group</button>
+            </div>
+        </div>
+    </div>
+</div>
