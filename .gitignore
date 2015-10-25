@@ -35,3 +35,6 @@ bower_components
 # Mac
 .DS_Store
 */**/.DS_Store
+
+# Compiled CSS
+public/stylesheets/compiled/*.css

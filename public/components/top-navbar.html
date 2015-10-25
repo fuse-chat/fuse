@@ -1,54 +1,63 @@
-<script>
-  var proto = Object.create(HTMLElement.prototype);
-
-  proto.createdCallback = function() {
-    this.innerHTML = `
-      <nav class="navbar navbar-inverse">
-          <div class="container-fluid">
-              <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#">Brand</a>
-              </div>
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                  <ul class="nav navbar-nav">
-                      <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                      <li><a href="" data-toggle="modal" data-target=".modal#fc-create-group">Create group</a></li>
-                      <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                          <ul class="dropdown-menu" role="menu">
-                              <li><a href="#">Action</a></li>
-                              <li><a href="#">Another action</a></li>
-                              <li><a href="#">Something else here</a></li>
-                              <li class="divider"></li>
-                              <li><a href="#">Separated link</a></li>
-                              <li class="divider"></li>
-                              <li><a href="#">One more separated link</a></li>
-                          </ul>
-                      </li>
-                  </ul>
-                  <ul class="nav navbar-nav navbar-right">
-                      <li><a href="#">Link</a></li>
-                  </ul>
-              </div>
-          </div>
-      </nav>
-    `
-  };
-
-  document.registerElement('top-navbar', {prototype: proto});
-</script>
-
-<template id="t">
-  <style>
-    ::content > * {
-      color: red;
-    }
-  </style>
-  <span>I'm a shadow-element using Shadow DOM!</span>
-  <content></content>
+<template id="top-navbar-template">
+    <style type="text/css" scoped>
+        nav.navbar.navbar-inverse {
+            margin: 0;
+        }
+    </style>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <i class="fa fa-map-pin"></i>
+                    Fuse
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-nav">
+                    <li><a href="" data-toggle="modal" data-target=".modal#fc-create-group">
+                        <i class="fa fa-plus"></i>
+                        Create group
+                    </a></li>
+                    <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li> -->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">
+                        <i class="fa fa-bell"></i>
+                    </a></li>
+                    <li><a href="#">
+                        <i class="fa fa-cog"></i>
+                        Preferences
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </template>
+
+<script>
+    (function() {
+        var proto = Object.create(HTMLElement.prototype);
+        var importDoc = document.currentScript.ownerDocument;
+        proto.createdCallback = function() {
+            this.innerHTML = importDoc.querySelector('#top-navbar-template').innerHTML;
+        };
+        document.registerElement('top-navbar', { prototype: proto });
+    })();
+</script>

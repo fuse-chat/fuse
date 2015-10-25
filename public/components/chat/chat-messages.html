@@ -1,0 +1,18 @@
+<template id="chat-messages-template">
+    <style type="text/css" scoped></style>
+    <ul id="fc-messages"></ul>
+</template>
+
+<script>
+    (function() {
+        var proto = Object.create(HTMLElement.prototype);
+        var importDoc = document.currentScript.ownerDocument;
+        proto.createdCallback = function() {
+            this.innerHTML = importDoc.querySelector('#chat-messages-template').innerHTML;
+        };
+        document.registerElement('chat-messages', { prototype: proto });
+    })();
+</script>
+
+
+

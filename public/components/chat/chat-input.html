@@ -1,0 +1,19 @@
+<template id="chat-input-template">
+    <style type="text/css" scoped>
+    </style>
+    <form action="" id="fc-message-form">
+      <input id="fc-m" autocomplete="off" /><button class="btn btn-primary">Send</button>
+    </form>
+</template>
+
+<script>
+    (function() {
+        var proto = Object.create(HTMLElement.prototype);
+        var importDoc = document.currentScript.ownerDocument;
+        proto.createdCallback = function() {
+            this.innerHTML = importDoc.querySelector('#chat-input-template').innerHTML;
+        };
+        document.registerElement('chat-input', { prototype: proto });
+    })();
+</script>
+

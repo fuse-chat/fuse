@@ -5,10 +5,13 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const lessMiddleware = require('less-middleware');
 
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+
+const publicDirPath = __dirname + '/public';
 
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
@@ -20,8 +23,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(lessMiddleware(path.join(publicDirPath)));
+app.use(express.static(path.join(publicDirPath)));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 // main routes
@@ -65,18 +68,15 @@ module.exports = app;
 
 // socket.io events
 io.on('connection', function(socket) {
-  socket.on('chat message', function(obj) {
-    console.log('message: ' + obj.message.body);
-  });
+    socket.on('chat message', function(obj) {
+        console.log('message: ' + obj.message.body);
+        io.emit('chat message', obj);
+    });
 });
 
-io.on('connection', function(socket) {
-  socket.on('chat message', function(obj) {
-    io.emit('chat message', obj);
-  });
-});
+var port = process.env.PORT || 3000;
 
 // start the server
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(port, function(){
+    console.log('listening on *:3000');
 });

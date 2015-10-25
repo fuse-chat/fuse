@@ -1,4 +1,13 @@
-var createGroup = function(name) {
+var DEBUG = true;
+
+var createGroup = function(params) {
+    var defaultParams = {
+        name: null,
+        description: null
+    };
+
+    var params = toolbelt.base.normalize(params, defaultParams);
+
     var handleResponse = function(data) {
         console.log(data);
     };
@@ -14,7 +23,7 @@ var start = function() {
     var form = document.querySelector('form#fc-message-form');
     var messageInput = document.querySelector('#fc-m');
     var messages = document.querySelector('#fc-messages');
-
+    console.log(form, messages, messageInput)
     var createGroupModal = document.querySelector('.modal#fc-create-group');
     var createGroupButton = createGroupModal.querySelector('.fc-create');
 

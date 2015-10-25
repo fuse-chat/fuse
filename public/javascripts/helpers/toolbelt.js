@@ -32,11 +32,24 @@
     };
 
     toolbelt.event = Object.create(null);
+    toolbelt.base = Object.create(null);
 
     toolbelt.event.stop = function(event) {
         event.preventDefault();
         event.stopPropagation();
         return false;
+    };
+
+    toolbelt.base.normalize = function(obj, normal) {
+        normal.keys.forEach(function(key) {
+            if (!Object.hasOwnProperty(key)) {
+                console.warn(`expected key: ${key} missing in ${object}`)
+            }
+
+            if (obj.key == null) {
+                obj.key = normal.key
+            }
+        });
     };
 
     // AMD registration: http://requirejs.org/docs/whyamd.html
