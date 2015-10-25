@@ -1,0 +1,19 @@
+<template id="groups-list-template">
+    <style type="text/css" scoped>
+    </style>
+    <div class="container">
+        <ul class="groups-list"></ul>
+    </div>
+</template>
+
+<script>
+    (function() {
+        var proto = Object.create(HTMLElement.prototype);
+        var importDoc = document.currentScript.ownerDocument;
+        proto.createdCallback = function() {
+            this.innerHTML = importDoc.querySelector('#groups-list-template').innerHTML;
+        };
+        document.registerElement('groups-list', { prototype: proto });
+    })();
+</script>
+
