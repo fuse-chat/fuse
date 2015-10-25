@@ -5,7 +5,7 @@ const R = {};
  * @return {Array<string>}
  */
 R.currentPath = function() {
-    return window.document.location.pathName.split(/\//).filter(function(c) {
+    return window.document.location.pathname.split(/\//).filter(function(c) {
         return !_.isEmpty(c);
     });
 };
