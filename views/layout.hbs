@@ -11,12 +11,14 @@
         <link rel="stylesheet" href="/stylesheets/main.css" />
         {{!-- component includes --}}
         <link rel="import" href="/components/top-navbar.html">
-        <link rel="import" href="/components/sidebar.html">
+        <link rel="import" href="/components/group-list.html">
         <link rel="import" href="/components/chat/chat-messages.html">
         <link rel="import" href="/components/chat/chat-input.html">
         <link rel="import" href="/components/modals/modal-create-group.html">
         {{!-- html page title, can be set by params from a res.render(..) call --}}
         <title>{{title}}</title>
+        {{!-- favicon --}}
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     </head>
     <body>
         {{!-- the contents of the file that's rendered by a res.render('file') call in routes
@@ -31,7 +33,7 @@
         {{!-- helpers lib --}}
         <script type="text/javascript" src="/javascripts/helpers/toolbelt.js"></script>
         {{!-- socketio --}}
-        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script src="//cdn.socket.io/socket.io-1.2.0.js"></script>
         {{!-- main javascript file --}}
         <script type="text/javascript" src="/javascripts/main.js"></script>
     </body>

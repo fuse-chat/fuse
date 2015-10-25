@@ -1,4 +1,13 @@
-var createGroup = function(name) {
+var DEBUG = true;
+
+var createGroup = function(params) {
+    var defaultParams = {
+        name: null,
+        description: null
+    };
+
+    var params = toolbelt.base.normalize(params, defaultParams);
+
     var handleResponse = function(data) {
         console.log(data);
     };

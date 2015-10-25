@@ -1,5 +1,6 @@
+@text-white: #ccc;
 
-form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+form { background: #000; padding: 3px; position: fixed; bottom: 0; width:100%; }
 form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
 form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
 #fc-messages { list-style-type: none; margin: 0; padding: 0; }
@@ -14,4 +15,33 @@ html {
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    height: 100%;
+}
+
+.fc-main-container {
+    margin-top: @navbar-height;
+    min-height: 100%;
+    height: 100%;
+}
+
+.fc-sidebar {
+    width: 15%;
+    padding: 1.5rem 1.5rem;
+    background-color: @gray-dark;
+    color: @text-white;
+    min-height: 100%;
+    height: 100%;
+}
+
+ul.fc-group-list {
+    overflow-y: auto;
+    min-height: 100%;
+
+    .fc-group-list-item {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
 }
