@@ -22,9 +22,7 @@ User.init = function() {
 };
 
 User.toJSON = function() {
-    return {
-        id: this.id
-    };
+    return this; // default implementation for now
 };
 
 module.exports = User;

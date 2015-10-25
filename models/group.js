@@ -85,9 +85,11 @@ Group.toJSON = function() {
     return {
         name: this.name,
         description: this.description,
-        usersIds: this.getUserIds()
-        // TODO messages and more...
-    }
+        userIds: this.getUserIds(),
+        messages: this.messages,
+        users: this.getUsers(),
+        id: this.id
+    };
 };
 
 module.exports = Group;

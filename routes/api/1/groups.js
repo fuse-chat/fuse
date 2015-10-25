@@ -8,8 +8,23 @@ const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
 
+
 /**
- * Get board by name
+ * Get all groups
+ */
+router.get('/', function(req, res) {
+    var name = req.params.name;
+    groupsdb.find().toArray(function(err, items) {
+        if (err) {
+            throw err;
+        }
+
+        res.json(items);
+    });
+});
+
+/**
+ * Get group by name
  */
 router.get('/:name', function(req, res) {
     var name = req.params.name;
@@ -33,7 +48,8 @@ router.post('/', function(req, res) {
     var name = req.body.name;
     var description = req.body.description;
 
-    // TODO: check name uniqueness against database?
+    // TODO: check name uniqueness against database
+    // and reject if exists. Discussion needed on what the frontend expects on error
 
     var group = Object.create(Group).init(name, description);
 
@@ -44,7 +60,7 @@ router.post('/', function(req, res) {
         }
 
 	    if (result) {
-            req.io.sockets.emit(defines['socket-group-created'], result.ops[0].name);
+            req.io.sockets.emit(defines['socket-group-created'], result.ops[0]);
             res.json(result);
         }
 	});
