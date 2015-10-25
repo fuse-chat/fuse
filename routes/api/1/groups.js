@@ -9,24 +9,17 @@ const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
 
 /**
- * Get the all boards, optionally filtered by body params
+ * Get board by name
  */
-router.get('/', function(req, res) {
-    groupsdb.find().toArray(function(err, items) {
+router.get('/:name', function(req, res) {
+    var name = req.params.name;
+    groupsdb.findOne({name: name}, function(err, items) {
         if (err) {
             throw err;
         }
 
-        res.send(items);
+        res.json(items);
     });
-});
-
-/**
- * Get a group by id
- */
-router.get('/:id', function(req, res) {
-    // `req.params.id` has access the id in the route
-    // TODO
 });
 
 /**
@@ -51,8 +44,7 @@ router.post('/', function(req, res) {
         }
 
 	    if (result) {
-            req.io.sockets.emit('group added', result);
-            req.io.emit('chat message', {message: {body: 'nope'}});
+            req.io.sockets.emit(defines['socket-group-created'], result.ops[0].name);
             res.json(result);
         }
 	});

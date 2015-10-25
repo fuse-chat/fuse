@@ -1,3 +1,7 @@
+// client side
+// toolbelt.js
+// - client side utitlity library
+
 (function() {
     // Establish the root object
     // Save the previous toolbelt variable
@@ -40,11 +44,11 @@
         return false;
     };
 
-    toolbelt.base.normalize = function(obj, normal) {
+    toolbelt.normalize = function(obj, normal) {
         obj = _.clone(obj);
 
         Object.keys(normal).forEach(function(key) {
-            if (shared.DEBUG && !Object.hasOwnProperty(key)) {
+            if (defines.DEBUG && !Object.hasOwnProperty(key)) {
                 console.warn(`expected key: ${key} missing in object:`, obj)
             }
 
@@ -54,6 +58,14 @@
         });
 
         return obj;
+    };
+
+    toolbelt.assert = function(cond, str) {
+        if (defines.DEBUG) {
+            if (!cond) {
+                throw new Error(str);
+            }
+        }
     };
 
     // AMD registration: http://requirejs.org/docs/whyamd.html

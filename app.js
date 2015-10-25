@@ -20,10 +20,6 @@ const publicDirPath = __dirname + '/public';
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-defines['socket-group-created'] = 'gcroup created';
-defines['socket-group-deleted'] = 'group deleted';
-defines['socket-chat-message'] = 'chat message';
-
 // socket.io events
 sockets(io);
 
@@ -46,6 +42,7 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 // main routes
 app.use('/', require('./routes/index'));
+app.use('/group', require('./routes/group'));
 app.use('/api/1/groups', require('./routes/api/1/groups'));
 
 // if none of routes above match
