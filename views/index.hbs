@@ -1,22 +1,13 @@
-<div class="modal" id="fc-create-group">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Modal title</h4>
-      </div>
-      <div class="form-group">
-        <input class="form-control fc-group-name" type="text" placeholder="Group name">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default fc-cancel" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary fc-create" data-dismiss="modal">Create group</button>
-      </div>
+<top-navbar></top-navbar>
+
+<div class="main-container">
+    <sidebar>
+        <group-list></group-list>
+    </sidebar>
+    <div class="chat-view">
+        <chat-messages></chat-messages>
+        <chat-input></chat-input>
     </div>
-  </div>
 </div>
 
-<ul id="fc-messages"></ul>
-<form action="" id="fc-message-form">
-  <input id="fc-m" autocomplete="off" /><button class="btn btn-primary">Send</button>
-</form>
+<modal-create-group></modal-create-group>

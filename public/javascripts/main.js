@@ -14,7 +14,7 @@ var start = function() {
     var form = document.querySelector('form#fc-message-form');
     var messageInput = document.querySelector('#fc-m');
     var messages = document.querySelector('#fc-messages');
-
+    console.log(form, messages, messageInput)
     var createGroupModal = document.querySelector('.modal#fc-create-group');
     var createGroupButton = createGroupModal.querySelector('.fc-create');
 
