@@ -10,6 +10,7 @@ const lessMiddleware = require('less-middleware');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const sockets = require('./sockets.js');
 
 const publicDirPath = __dirname + '/public';
 
@@ -23,6 +24,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// make the io object available on every req at `req.io`
+app.use(function(req, res, next) {
+    req.io = io;
+    next();
+});
+
 app.use(lessMiddleware(path.join(publicDirPath)));
 app.use(express.static(path.join(publicDirPath)));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
@@ -67,12 +75,7 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 // socket.io events
-io.on('connection', function(socket) {
-    socket.on('chat message', function(obj) {
-        console.log('message: ' + obj.message.body);
-        io.emit('chat message', obj);
-    });
-});
+sockets(io);
 
 var port = process.env.PORT || 3000;
 
