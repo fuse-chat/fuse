@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const lessMiddleware = require('less-middleware');
 
+const defines = require('./defines');
+
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -17,6 +19,13 @@ const publicDirPath = __dirname + '/public';
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+defines['socket-group-created'] = 'gcroup created';
+defines['socket-group-deleted'] = 'group deleted';
+defines['socket-chat-message'] = 'chat message';
+
+// socket.io events
+sockets(io);
 
 // middleware
 // see: http://expressjs.com/guide/using-middleware.html
@@ -74,8 +83,6 @@ app.use(function(err, req, res, next) {
 // export app in case other files want to use it
 module.exports = app;
 
-// socket.io events
-sockets(io);
 
 var port = process.env.PORT || 3000;
 

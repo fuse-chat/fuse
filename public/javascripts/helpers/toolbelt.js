@@ -41,15 +41,19 @@
     };
 
     toolbelt.base.normalize = function(obj, normal) {
-        normal.keys.forEach(function(key) {
-            if (!Object.hasOwnProperty(key)) {
-                console.warn(`expected key: ${key} missing in ${object}`)
+        obj = _.clone(obj);
+
+        Object.keys(normal).forEach(function(key) {
+            if (shared.DEBUG && !Object.hasOwnProperty(key)) {
+                console.warn(`expected key: ${key} missing in object:`, obj)
             }
 
-            if (obj.key == null) {
-                obj.key = normal.key
+            if (obj[key] == null) {
+                obj[key] = normal[key];
             }
         });
+
+        return obj;
     };
 
     // AMD registration: http://requirejs.org/docs/whyamd.html
