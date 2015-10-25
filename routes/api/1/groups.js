@@ -3,6 +3,10 @@ var Group = require(app_root_path + '/models/group.js');
 var express = require('express');
 var router = express.Router();
 
+var mongo = require('mongoskin');
+var db = mongo.db('mongodb://localhost:27017/fuse');
+var groupsdb = db.collection('groups');
+
 /**
  * Create a group
  * 
@@ -18,7 +22,11 @@ router.post('/', function(req, res) {
 
     var group = Object.create(Group).init(name, description);
 
-    // TODO: save group to database here
+    // save group to database here
+	groupsdb.insert(group, function(err, result) {
+	    if (err) throw err;
+	    if (result) console.log('Added!');
+	});
 
     res.send('unimplemented!');
 });
@@ -32,7 +40,10 @@ router.post('/', function(req, res) {
 router.delete('/', function(req, res) {
     var id = req.body.id;
 
-    // TODO: find group by id in database and remove it
+    // find group by id in database and remove it
+	groupsdb.remove({_id: id}, function(err, result) { //does not work. Use name instead?
+	    if (!err) console.log('Deleted!');
+	});
 
     res.send('unimplemented!')
 });
