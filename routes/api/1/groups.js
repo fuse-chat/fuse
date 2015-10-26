@@ -76,15 +76,16 @@ router.delete('/', function(req, res) {
     var id = req.body.id;
 
     // find group by id in database and remove it
-	groupsdb.remove({_id: id}, function(err, result) { //does not work. Use name instead?
+	groupsdb.remove({id: id}, function(err, result) {
 	    if (err) {
             throw err;
         }
 
-        req.io.emit('group deleted', id);
+        if (result) {
+            req.io.sockets.emit(defines['socket-group-deleted'], result.ops[0]);
+            res.json(result);
+        }
 	});
-
-    res.send('unimplemented!')
 });
 
 module.exports = router;

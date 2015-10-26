@@ -80,6 +80,24 @@ G.queryGroupDataOnSidebar = function(field) {
 };
 
 /**
+ * Get the current selected group
+ * @return {HTMLElement} the node that is selected
+ */
+G.queryGroupSelected = function() {
+    var groupList = document.querySelector('.fc-group-list');
+    var groupListItems = _.toArray(groupList.querySelectorAll('.fc-group-list-item'));
+
+	var node = null;
+    groupListItems.forEach(function(item) {
+        if(item.dataset.selected === 'true'){
+			node = item;
+		}
+    });
+
+	return node;
+};
+
+/**
  * Adds the group named `name` to the sidebar list if it doesn't exist already
  * @return {HTMLElement} the node that was added or null
  */
