@@ -8,9 +8,38 @@ const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
 
+// TODO: cleanup
+// get the group id, given the name
+// for that item set the `selected` key
+// then send all items so they can be used for the `selected` attribute
 router.get('/:name', function(req, res) {
     var groupName = req.params.name;
-    res.render('index');
+    
+    groupsdb.findOne({name: groupName}, function(err, item) {
+        if (err) {
+            throw err;
+        }
+
+        var id = item.id;
+
+        groupsdb.find().toArray(function(err, items) {
+            if (err) {
+                throw err;
+            }
+
+            var selectedGroup = null;
+
+            items.some(function(item) {
+                if (item.id === id) {
+                    selectedGroup = item;
+                    item.selected = true;
+                    return true;
+                }
+            });
+
+            res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: selectedGroup });
+        });
+    });
 });
 
 module.exports = router;

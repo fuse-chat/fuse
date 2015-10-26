@@ -116,11 +116,11 @@ G.addToSidebar = function(data) {
     return node;
 };
 
-G.refreshGroupListNames = function() {
-    G.getAllGroupsOnServer(function(arr) {
-        arr.forEach(G.addToSidebar);
-    });
-};
+// G.refreshGroupListNames = function() {
+//     G.getAllGroupsOnServer(function(arr) {
+//         arr.forEach(G.addToSidebar);
+//     });
+// };
 
 // TODO:nishanths clean up into non globals
 var createGroupModal = document.querySelector('.modal#fc-create-group');
@@ -144,7 +144,7 @@ defines.socket.on(defines['socket-group-removed'], function(data) {
 });
 
 G.start = function() {
-    G.refreshGroupListNames();
+    // G.refreshGroupListNames();
 };
 
-G.start();
+// G.start();

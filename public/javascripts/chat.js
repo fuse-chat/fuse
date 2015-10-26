@@ -15,7 +15,7 @@ form.addEventListener('submit', function(e) {
 	var senderID; //TODO: We need login or some way of distinguishing different users
 
     var node = G.queryGroupSelected();
-	if(node == null) return toolbelt.event.stop(e);
+	if (node == null) return toolbelt.event.stop(e);
 
 	groupID = node.dataset.id;
 
@@ -26,7 +26,7 @@ form.addEventListener('submit', function(e) {
 
 defines.socket.on(defines['socket-chat-message'], function(obj) {
     var node = G.queryGroupSelected();
-	if(node == null) return;
+	if (node == null) return;
 
 	if(node.dataset.id === obj.message.groupid){
 		var li = document.createElement('li');

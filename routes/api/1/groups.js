@@ -13,7 +13,6 @@ const groupsdb = db.collection('groups');
  * Get all groups
  */
 router.get('/', function(req, res) {
-    var name = req.params.name;
     groupsdb.find().toArray(function(err, items) {
         if (err) {
             throw err;
@@ -28,12 +27,12 @@ router.get('/', function(req, res) {
  */
 router.get('/:name', function(req, res) {
     var name = req.params.name;
-    groupsdb.findOne({name: name}, function(err, items) {
+    groupsdb.findOne({name: name}, function(err, item) {
         if (err) {
             throw err;
         }
 
-        res.json(items);
+        res.json(item);
     });
 });
 
