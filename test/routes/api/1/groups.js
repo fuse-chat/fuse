@@ -40,6 +40,21 @@ describe("Group API Unit Tests",function(){
     });
   });
 
+  // Test trying to get a nonexistent group name
+  it("test nonexistent group - should return null",function(done){
+    // calling home page api
+    request(base_url)
+    .get(base_pathname.concat(nonexistentName))
+    .expect("Content-type",/json/)
+    .expect(200) // THis is HTTP response
+    .end(function(err, result) {
+      if(err) { throw err; }
+      should.equal(result.body, null);
+      done();
+    });
+  });
+
+
   it("Test the that we can get all groups",function(done){
     groupsdb.find().toArray(function(err, items) {
       if(err) { throw err; }
