@@ -80,6 +80,24 @@ G.queryGroupDataOnSidebar = function(field) {
 };
 
 /**
+ * Get the current selected group
+ * @return {HTMLElement} the node that is selected
+ */
+G.queryGroupSelected = function() {
+    var groupList = document.querySelector('.fc-group-list');
+    var groupListItems = _.toArray(groupList.querySelectorAll('.fc-group-list-item'));
+
+	var node = null;
+    groupListItems.forEach(function(item) {
+        if(item.dataset.selected === 'true'){
+			node = item;
+		}
+    });
+
+	return node;
+};
+
+/**
  * Adds the group named `name` to the sidebar list if it doesn't exist already
  * @return {HTMLElement} the node that was added or null
  */
@@ -98,11 +116,11 @@ G.addToSidebar = function(data) {
     return node;
 };
 
-G.refreshGroupListNames = function() {
-    G.getAllGroupsOnServer(function(arr) {
-        arr.forEach(G.addToSidebar);
-    });
-};
+// G.refreshGroupListNames = function() {
+//     G.getAllGroupsOnServer(function(arr) {
+//         arr.forEach(G.addToSidebar);
+//     });
+// };
 
 // TODO:nishanths clean up into non globals
 var createGroupModal = document.querySelector('.modal#fc-create-group');
@@ -126,7 +144,7 @@ defines.socket.on(defines['socket-group-removed'], function(data) {
 });
 
 G.start = function() {
-    G.refreshGroupListNames();
+    // G.refreshGroupListNames();
 };
 
-G.start();
+// G.start();
