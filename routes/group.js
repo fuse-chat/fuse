@@ -20,6 +20,13 @@ router.get('/:name', function(req, res) {
             throw err;
         }
 
+        // If item does not exist, throw a 404
+        // TODO: Make this send the error page
+        if(!item) {
+          res.status(404).send("Not found");
+          return false;
+        }
+
         var id = item.id;
 
         groupsdb.find().toArray(function(err, items) {
