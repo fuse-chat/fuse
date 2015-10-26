@@ -16,14 +16,8 @@ describe("SAMPLE unit test",function(){
     // calling home page api
     server
     .get("/")
-    .expect("Content-type",/json/)
-    .expect(200) // THis is HTTP response
-    .end(function(err,res){
-      // HTTP status should be 200
-      res.status.should.equal(200);
-      // Error key should be false.
-      done();
-    });
+    .expect("Content-type",/html/)
+    .expect(200, done) // THis is HTTP response
   });
 
 });

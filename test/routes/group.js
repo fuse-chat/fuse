@@ -9,35 +9,37 @@ var base_url = "http://localhost:3000";
 // This agent refers to PORT where program is runninng.
 var server = request.agent(base_url);
 
+    //groupsdb.find().forEach( function(item) {
+    //  pathname = pathname.concat(item.name);
 
 // UNIT test begin
 
 describe("Group Unit Tests",function(){
 
-  it("should return a page for each group",function(done){
-    var pathname = "/group/";
-    groupsdb.find().forEach( function(item) {
-      pathname = pathname.concat(item.name);
-      // calling home page api
-      request(base_url)
-      .get(pathname)
-      .expect("Content-type",/json/)
-      .expect(200) // THis is HTTP response
-    });
-    done();
-  });
+  // TODO: I cannot figure out how loops work with supertest,
+  // so figure that out
+//  it("should return a page for each group",function(done){
+//    var pathname = "/group/Persist";
+//      // calling home page api
+//      var r = request(base_url)
+//      .get(pathname)
+//      .set('Connection', 'keep-alive')
+//      .expect("Content-type",/html/)
+//      .expect(200) // THis is HTTP response
+//      .end(function(err, res) {
+//        if(err) {
+//          throw err;
+//        }
+//        done();
+//      });
+//  });
 
-  it("should return all groups",function(done){
+  it("should not exist",function(done){
     var pathname = "/group";
-    groupsdb.find().forEach( function(item) {
-      pathname = pathname.concat(item.name);
-      // calling home page api
-      request(base_url)
-      .get(pathname)
-      .expect("Content-type",/json/)
-      .expect(200) // THis is HTTP response
-    });
-    done();
+    request(base_url)
+    .get(pathname)
+    .expect("Content-type",/html/)
+    .expect(404,done) // THis is HTTP response
   });
 
 });
