@@ -28,6 +28,11 @@ $ nvm alias default 4.2.1
 * Install MongoDB (`sudo apt-get install mongodb` for ubuntu or [this](https://docs.mongodb.org/manual/installation/) otherwise) for database management
 * Run `mongod --dbpath=<path of your choice>` to start the mongodb db server. It defaults to `localhost:27017`, which is what our app looks for
 
+## Testing
+
+* All tests can be found in the test folder.
+* To run the tests, ensure that you have installed everything (npm install), then run `./node_modules/mocha/bin/mocha --recursive` from the main folder.
+
 # Running locally
 
 * `git pull --rebase origin master` to get the latest
