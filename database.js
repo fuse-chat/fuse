@@ -3,7 +3,6 @@ const defines = require(app_root_path + '/defines');
 const Message = require(app_root_path + '/models/message.js');
 
 const mongo = require('mongoskin');
-const groupsdb = db.collection('groups');
 
 /**
  * A Database Adaptor
@@ -17,7 +16,7 @@ var Database = {};
  */
 Database.init = function() {
   this.database = mongo.db('mongodb://localhost:27017/fuse');
-  this.groupsdb = database.collection('group');
+  this.groupsdb = this.database.collection('group');
 };
 
 /**
@@ -104,7 +103,7 @@ Database.deleteGroupById = function(groupName) {
  * @param {Message} message
  * @param {Group} group
  */
-Database.addMessageTogroup(message, group) {
+Database.addMessageTogroup = function(message, group) {
   this.groupsdb.update({id: group.id}, {'$push':{messages:message}}, function(err, item) {
     if (err) {
       throw err;
@@ -117,7 +116,7 @@ Database.addMessageTogroup(message, group) {
  * @param {Message} message
  * @param {id} groupId
  */
-Database.addMessageTogroupById(message, groupId) {
+Database.addMessageTogroupById = function(message, groupId) {
   this.groupsdb.update({id: id}, {'$push':{messages:message}}, function(err, item) {
     if (err) {
       throw err;
@@ -130,7 +129,7 @@ Database.addMessageTogroupById(message, groupId) {
  * @param {Message} message
  * @param {string} groupName
  */
-Database.addMessageTogroupByName(message, groupName) {
+Database.addMessageTogroupByName = function(message, groupName) {
   this.groupsdb.update({name: groupName}, {'$push':{messages:message}}, function(err, item) {
     if (err) {
       throw err;
