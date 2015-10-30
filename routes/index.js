@@ -1,14 +1,13 @@
 var express = require('express');
 var router = express.Router();
+const app_root_path = require('app-root-path').path;
+const Database = require(app_root_path + '/database');
 
-const mongo = require('mongoskin');
-const db = mongo.db('mongodb://localhost:27017/fuse');
-const groupsdb = db.collection('groups');
-
+var database = Object.create(Database).init();
 // TODO: cleanup
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    groupsdb.find().toArray(function(err, items) {
+    database.getAllGroups(function(err, items) {
         if (err) {
             throw err;
         }

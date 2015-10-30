@@ -16,86 +16,71 @@ var Database = {};
  */
 Database.init = function() {
   this.database = mongo.db('mongodb://localhost:27017/fuse');
-  this.groupsdb = this.database.collection('group');
+  this.groupsdb = this.database.collection('groups');
+  return this;
 };
 
 /**
- * Get a group by name
+ * Get a group by name and perform the callback on it.
  * @param {string} name
+ * @param {function} callback
  */
-Database.getGroupByName = function(name) {
-  return this.groupsdb.findOne({name: name});
+Database.getGroupByName = function(name, callback) {
+  return this.groupsdb.findOne({name: name}, callback);
 }
 
 /**
- * Get group by id
+ * Get group by id and perform the callback on it
  * @param {id} id
+ * @param {function} callback
  */
-Database.getGroupByID = function(id) {
-  return this.groupsdb.findOne({id: id});
+Database.getGroupByID = function(id, callback) {
+  return this.groupsdb.findOne({id: id}, callback);
 }
 
 /**
- * Add the given group to the database
+ * Add the given group to the databas and perform the callback on it
  * @param {Group} group
- * @return {Boolean} true if success, false if fail
  */
-Database.addGroup = function(group) {
-  success = false;
-  groupsdb.insert(group, function(err, result) {
-    if (err) { throw err; }
-    if (result) { success = true; }
-  });
-  return success;
+Database.addGroup = function(group, callback) {
+  return this.groupsdb.insert(group, callback);
 }
 
 /**
- * Return all groups
+ * Run the given function on the groups
+ * Note the callback function should take an err
+ * the groups
+ * @param {function} callback
  */
-Database.getGroups = function() {
-  return this.groupsdb.find().toArray();
+Database.getAllGroups = function(callback) {
+  return this.groupsdb.find().toArray(callback);
 }
 
 /**
  * Remove group from database
  * @param {Group} group
+ * @param {function} callback
  */
-Database.deleteGroup = function(group) {
-  success = false;
-  groupsdb.remove({id: group.id}, function(err, result) {
-    if (err) { throw err; }
-    if (result) { success = true; }
-  });
-
-  return success;
+Database.deleteGroup = function(group, callback) {
+  return this.groupsdb.remove({id: group.id}, callback);
 }
 
 /**
  * Remove group from database by id
  * @param {id} groupId
+ * @param {function} callback
  */
-Database.deleteGroupById = function(groupId) {
-  success = false;
-  groupsdb.remove({id: groupId}, function(err, result) {
-    if (err) { throw err; }
-    if (result) { success = true; }
-  });
-
-  return success;
+Database.deleteGroupById = function(groupId, callback) {
+  return this.groupsdb.remove({id: groupId}, callback);
 }
 
 /**
  * Remove group from database by name
  * @param {string} groupName
+ * @param {function} callback
  */
-Database.deleteGroupById = function(groupName) {
-  success = false;
-  groupsdb.remove({name: groupName}, function(err, result) {
-    if (err) { throw err; }
-    if (result) { success = true; }
-  });
-
-  return success;
+Database.deleteGroupById = function(groupName, callback) {
+  this.groupsdb.remove({name: groupName}, callback);
 }
 
 /**
@@ -103,7 +88,7 @@ Database.deleteGroupById = function(groupName) {
  * @param {Message} message
  * @param {Group} group
  */
-Database.addMessageTogroup = function(message, group) {
+Database.addMessageToGroup = function(message, group) {
   this.groupsdb.update({id: group.id}, {'$push':{messages:message}}, function(err, item) {
     if (err) {
       throw err;
@@ -116,8 +101,8 @@ Database.addMessageTogroup = function(message, group) {
  * @param {Message} message
  * @param {id} groupId
  */
-Database.addMessageTogroupById = function(message, groupId) {
-  this.groupsdb.update({id: id}, {'$push':{messages:message}}, function(err, item) {
+Database.addMessageToGroupById = function(message, groupId) {
+  this.groupsdb.update({id: groupId}, {'$push':{messages:message}}, function(err, item) {
     if (err) {
       throw err;
     }
@@ -129,7 +114,7 @@ Database.addMessageTogroupById = function(message, groupId) {
  * @param {Message} message
  * @param {string} groupName
  */
-Database.addMessageTogroupByName = function(message, groupName) {
+Database.addMessageToGroupByName = function(message, groupName) {
   this.groupsdb.update({name: groupName}, {'$push':{messages:message}}, function(err, item) {
     if (err) {
       throw err;
