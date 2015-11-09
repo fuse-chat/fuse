@@ -9,12 +9,25 @@ const lessMiddleware = require('less-middleware');
 
 const defines = require('./defines');
 
+// adding for passport use
+const exphbs = require('express-handlebars');
+const methodOverride = require('method-override');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const TwitterStrategy = require('passport-twitter');
+const GoogleStrategy = require('passport-google');
+const FacebookStrategy = require('passport-facebook');
+const funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
+
+
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
 
 const publicDirPath = __dirname + '/public';
+
 
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
@@ -30,15 +43,98 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//added for passport usage
+app.use(methodOverride('X-HTTP-Method-Override'));
+app.use(session({secret: 'supernova', saveUninitialized: true, resave: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 // make the io object available on every req at `req.io`
 app.use(function(req, res, next) {
     req.io = io;
     next();
 });
 
+//added for passport use
+//Session-persisted message middleware
+app.use(function(req, res, next){
+  var err = req.session.error,
+      msg = req.session.notice,
+      success = req.session.success;
+
+  delete req.session.error;
+  delete req.session.success;
+  delete req.session.notice;
+
+  if (err) res.locals.error = err;
+  if (msg) res.locals.notice = msg;
+  if (success) res.locals.success = success;
+
+  next();
+});
+
+
 app.use(lessMiddleware(path.join(publicDirPath)));
 app.use(express.static(path.join(publicDirPath)));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
+
+//===============PASSPORT=================
+// Passport session setup.
+passport.serializeUser(function(user, done) {
+  console.log("hello"); 
+  console.log("serializing " + user.username);
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  console.log("deserializing " + obj);
+  done(null, obj);
+});
+
+// Use the LocalStrategy within Passport to login/”signin” users.
+passport.use('local-signin', new LocalStrategy(
+  {passReqToCallback : true}, //allows us to pass back the request to the callback
+  function(req, username, password, done) {
+    funct.localAuth(username, password)
+    .then(function (user) {
+      if (user) {
+        console.log("LOGGED IN AS: " + user.username);
+        req.session.success = 'You are successfully logged in ' + user.username + '!';
+        done(null, user);
+      }
+      if (!user) {
+        console.log("COULD NOT LOG IN");
+        req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
+        done(null, user);
+      }
+    })
+    .fail(function (err){
+      console.log(err.body);
+    });
+  }
+));
+// Use the LocalStrategy within Passport to register/"signup" users.
+passport.use('local-signup', new LocalStrategy(
+  {passReqToCallback : true}, //allows us to pass back the request to the callback
+  function(req, username, password, done) {
+    funct.localReg(username, password)
+    .then(function (user) {
+      if (user) {
+        console.log("REGISTERED: " + user.username);
+        req.session.success = 'You are successfully registered and logged in ' + user.username + '!';
+        done(null, user);
+      }
+      if (!user) {
+        console.log("COULD NOT REGISTER");
+        req.session.error = 'That username is already in use, please try a different one.'; //inform user could not log them in
+        done(null, user);
+      }
+    })
+    .fail(function (err){
+      console.log(err.body);
+    });
+  }
+));
 
 // main routes
 app.use('/', require('./routes/index'));
