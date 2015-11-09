@@ -11,6 +11,8 @@ const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
 const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
+//used to collect username 
+var myModule = require("C:\\Users\\Robbie\\Desktop\\project\\fuse\\functions.js");
 
 //We will be creating these two files shortly
 // var config = require('./config.js'), //config file contains all tokens and other private info
@@ -53,11 +55,12 @@ router.get('/', function(req, res, next) {
         if (err) {
             throw err;
         }
+        //the username of logfed in user
+        var name1 = myModule.name;
 
         // set the first one to be the selected one
-        items[0].selected = true;
-
-        res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0] });
+        //items[0].selected = true;
+        res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name1});
     });
 });
 
