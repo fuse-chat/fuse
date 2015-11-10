@@ -4,6 +4,7 @@ const app_root_path = require('app-root-path').path;
 const Database = require(app_root_path + '/database');
 
 var database = Object.create(Database).init();
+const app_root_path = require('app-root-path').path;
 const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
@@ -14,8 +15,8 @@ const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
 const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
-//used to collect username 
-var myModule = require("C:\\Users\\Robbie\\Desktop\\project\\fuse\\functions.js");
+//used to collect username
+var myModule = require(app_root_path + '/functions.js');
 
 //We will be creating these two files shortly
 // var config = require('./config.js'), //config file contains all tokens and other private info
@@ -62,7 +63,7 @@ router.get('/', function(req, res, next) {
         var name1 = myModule.name;
 
         // set the first one to be the selected one
-        //items[0].selected = true;
+        items[0].selected = true;
         res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name1});
     });
 });
