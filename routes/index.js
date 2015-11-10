@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
 const app_root_path = require('app-root-path').path;
+const Database = require(app_root_path + '/database');
+
+var database = Object.create(Database).init();
 const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
@@ -52,7 +54,7 @@ router.get('/logout', function(req, res){
 // TODO: cleanup
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    groupsdb.find().toArray(function(err, items) {
+    database.getAllGroups(function(err, items) {
         if (err) {
             throw err;
         }
