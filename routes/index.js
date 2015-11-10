@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
+const app_root_path = require('app-root-path').path;
+const Database = require(app_root_path + '/database');
 
+var database = Object.create(Database).init();
 const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
@@ -12,8 +15,13 @@ const TwitterStrategy = require('passport-twitter');
 const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
 //used to collect username 
-var myModule = require("C:\\Users\\Robbie\\Desktop\\project\\fuse\\functions.js");
 var name;
+//used to collect username
+var myModule = require(app_root_path + '/functions.js');
+
+//We will be creating these two files shortly
+// var config = require('./config.js'), //config file contains all tokens and other private info
+//    funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 
 //===============ROUTES=================
 //displays our signup page
@@ -67,16 +75,18 @@ router.get('/postSignIn',function(req, res, next) {
 // TODO: cleanup
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    groupsdb.find().toArray(function(err, items) {
+    database.getAllGroups(function(err, items) {
         if (err) {
             throw err;
         }
         //the username of logfed in user
         var name1 = myModule.name;
-       	//console.log(badName);
-        
-        // set the first one to be the selected one
-        //items[0].selected = true;
+
+
+        // set the first one to be the selected one if it exists
+        if(items[0]) {
+          items[0].selected = true;
+        }
         res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name1});
     });
 });

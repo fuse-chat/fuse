@@ -4,6 +4,7 @@
 // - handle ui changes when groups are crated and removed
 
 defines['groups-url-base'] = `/api/${defines.API_VERSION}/groups`;
+defines['single-group-url-base'] = `/group`;
 
 /**
  * The group global namespace
@@ -18,7 +19,9 @@ const G = {};
 G.createOnServer = function(params, opt_fn) {
     var defaultGroupParams = { name: '', description: '' };
     params = toolbelt.normalize(params, defaultGroupParams);
-    $.post(defines['groups-url-base'], params, opt_fn || function(){});
+    $.post(defines['groups-url-base'], params, opt_fn || function(res){
+      window.location.href = defines['single-group-url-base'] + '/' + res.name;
+    });
 };
 
 G.getAllGroupsOnServer = function(fn) {
