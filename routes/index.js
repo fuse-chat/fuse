@@ -4,7 +4,6 @@ const app_root_path = require('app-root-path').path;
 const Database = require(app_root_path + '/database');
 
 var database = Object.create(Database).init();
-const app_root_path = require('app-root-path').path;
 const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
