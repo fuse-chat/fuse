@@ -43,7 +43,10 @@ Database.getGroupByID = function(id, callback) {
  * @param {Group} group
  */
 Database.addGroup = function(group, callback) {
-  return this.groupsdb.insert(group, callback);
+  return this.groupsdb.insert(group, function(err, result) {
+    if(result) { callback(err, result.ops[0]); }
+    else { callback(err, result); }
+  });
 }
 
 /**

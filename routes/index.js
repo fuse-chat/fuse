@@ -61,8 +61,10 @@ router.get('/', function(req, res, next) {
         //the username of logfed in user
         var name1 = myModule.name;
 
-        // set the first one to be the selected one
-        items[0].selected = true;
+        // set the first one to be the selected one if it exists
+        if(items[0]) {
+          items[0].selected = true;
+        }
         res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name1});
     });
 });

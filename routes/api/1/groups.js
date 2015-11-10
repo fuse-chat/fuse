@@ -44,12 +44,11 @@ router.post('/', function(req, res) {
   // and reject if exists. Discussion needed on what the frontend expects on error
 
   var group = Object.create(Group).init(name, description);
-
   // save group to database here
   database.addGroup(group, function(err, result) {
     if(err) { throw err; }
     if(result) {
-      req.io.sockets.emit(defines['socket-group-created'], result.ops[0]);
+      req.io.sockets.emit(defines['socket-group-created'], result);
       res.json(result);
     }
   });
