@@ -10,7 +10,7 @@ const lessMiddleware = require('less-middleware');
 const defines = require('./defines');
 
 // adding for passport use
-const exphbs = require('express-handlebars');
+// const exphbs = require('express-handlebars');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const passport = require('passport');
@@ -180,5 +180,5 @@ var port = process.env.PORT || 3000;
 
 // start the server
 http.listen(port, function(){
-    console.log('listening on *:3000');
+    console.log('listening on *:' + port);
 });
