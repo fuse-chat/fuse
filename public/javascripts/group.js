@@ -17,7 +17,7 @@ const G = {};
  * Use the opt_fn to handle failures such as creating a group with the same name
  */
 G.createOnServer = function(params, opt_fn) {
-    var defaultGroupParams = { name: '', description: '' };
+    var defaultGroupParams = { name: '', description: '', position: null };
     params = toolbelt.normalize(params, defaultGroupParams);
     $.post(defines['groups-url-base'], params, opt_fn || function(res){
       window.location.href = defines['single-group-url-base'] + '/' + res.name;
@@ -26,6 +26,14 @@ G.createOnServer = function(params, opt_fn) {
 
 G.getAllGroupsOnServer = function(fn) {
     $.get(defines['groups-url-base'], fn);
+};
+
+/* This function is not used. Could be used in the future. */
+G.setGroupAsSelected = function(name) {
+  var groupList = document.querySelector('.fc-group-list');
+  window.location.href = defines['single-group-url-base'] + '/' + name;
+  var newGroupList = document.querySelector('.fc-group-list');
+  newGroupList = groupList;
 };
 
 /**
@@ -63,6 +71,27 @@ G.makeGroupListItem = function(data) {
     // TODO numberDiv, maybe an unread messages count
 
     return wrapperLink;
+};
+
+/*
+ * Updates the sidebar to contain the new groups
+ * @param  {Array<Group>} groups
+ */
+G.updateSidebar = function(groups) {
+    var selectedGroup = this.queryGroupSelected();
+    // if selected group is not in the new list of groups, set a new group
+    // as selected
+    if(groups.indexOf(selectedGroup) == -1) {
+      if(groups.length == 0) {
+        selectedGroup = null;
+      } else {
+        groups[0].selected = true;
+        selectedGroup = groups[0];
+      }
+    }
+
+    // Now update the new group list.
+
 };
 
 /**
@@ -131,13 +160,20 @@ var createGroupButton = createGroupModal.querySelector('.fc-create');
 
 createGroupButton.addEventListener('click', function(e) {
     var name = createGroupModal.querySelector('input.fc-group-name').value;
-    G.createOnServer({ name: name });
+    Geo.getCurrentPosition(function (position) {
+      G.createOnServer({ name: name, position: position });
+    });
 });
 
 
 // handle newly created group events from the server
 defines.socket.on(defines['socket-group-created'], function(data) {
-    G.addToSidebar(data);
+  Geo.groupWithinDistance(data, function(isWithinDistance) {
+    if(isWithinDistance) {
+      console.log("Within distance");
+      G.addToSidebar(data);
+    }
+  });
 });
 
 // handle group removed events from the server
