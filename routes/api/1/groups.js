@@ -39,11 +39,12 @@ router.get('/:name', function(req, res) {
 router.post('/', function(req, res) {
   var name = req.body.name;
   var description = req.body.description;
+  var position = req.body.position;
 
   // TODO: check name uniqueness against database
   // and reject if exists. Discussion needed on what the frontend expects on error
 
-  var group = Object.create(Group).init(name, description);
+  var group = Object.create(Group).init(name, description, position);
   // save group to database here
   database.addGroup(group, function(err, result) {
     if(err) { throw err; }

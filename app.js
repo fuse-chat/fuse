@@ -40,7 +40,7 @@ sockets(io);
 // see: http://expressjs.com/guide/using-middleware.html
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //added for passport usage
