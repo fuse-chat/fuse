@@ -1,10 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const app_root_path = require('app-root-path').path;
 const Database = require(app_root_path + '/database');
 var util = require('util');
 
-var database = Object.create(Database).init();
+const database = Object.create(Database).init();
 const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
