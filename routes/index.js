@@ -15,6 +15,7 @@ const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
 const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
+const passportHelpers = require(app_root_path + '/helpers/passport-functions.js');
 
 //===============ROUTES=================
 // displays our sign-in/sign-up page
@@ -81,10 +82,9 @@ router.get('/postSignIn',function(req, res, next) {
         }
         
         var name = req.query.id;
-        //the username of logfed in user
         
         // set the first one to be the selected one
-        //items[0].selected = true;
+        // items[0].selected = true;
         res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name});
     });
 }); 
@@ -92,8 +92,10 @@ router.get('/postSignIn',function(req, res, next) {
 // GET home page.
 // - If the user is signed in, show all the groups
 // - Redirect to sign in the user
-router.get('/', function(req, res, next) {    
-    if (req.session.passport && req.session.passport.user) { // signed-in
+router.get('/', function(req, res, next) {
+    var user = passportHelpers.currentUser(req);
+
+    if (user != null) { // signed-in
         console.log('main route: signed in', req.session.passport.user);
 
         database.getAllGroups(function(err, items) {

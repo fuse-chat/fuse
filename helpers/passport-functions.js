@@ -3,12 +3,11 @@ const defines = require(app_root_path + '/defines');
 const User = require(app_root_path + '/models/user.js');
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const Q = require('q');
 const mongo = require('mongoskin');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const userdb = db.collection('user');
-
-var bcrypt = require('bcryptjs'),
-    Q = require('q');
 
 // used in local-signup strategy
 exports.localReg = function (username, password) {
@@ -20,7 +19,7 @@ exports.localReg = function (username, password) {
     };
   
     // check if username is already assigned in our database
-    userdb.findOne({ name: username}, function(err, item){
+    userdb.findOne({ name: username}, function(err, item) {
         if(err) {
             throw err;
         }
@@ -81,5 +80,10 @@ exports.localAuth=function(username, password){
     });
 
     return deferred.promise;
+};
+
+// Extract the current user from a req object
+exports.currentUser = function(req) {
+    return req.session.passport && req.session.passport.user;
 };
 
