@@ -155,7 +155,6 @@ passport.use('local-signup', new LocalStrategy(
   }
 ));
 
-
 // main routes
 app.use('/', require('./routes/index'));
 app.use('/group', require('./routes/group'));
