@@ -1,4 +1,5 @@
 const shortid = require('shortid');
+const Preferences = require('./preferences.js');
 
 /**
  * The User class
@@ -17,7 +18,8 @@ User.init = function(username, password) {
     // TODO: add photo url?
     this.name = username;
     this.id = shortid.generate();
-    this.password =password; 
+    this.password = password; 
+    this.preferences = Object.create(Preferences).init();
     return this;
 };
 
