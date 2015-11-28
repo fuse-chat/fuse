@@ -2,6 +2,7 @@ const app_root_path = require('app-root-path').path;
 const _ = require('lodash');
 const shortid = require('shortid');
 const helpers = require(app_root_path + '/helpers/helpers.js');
+const PositionFunctions = require(app_root_path + '/public/javascripts/positionfunctions');
 
 /**
  * The Group class
@@ -14,22 +15,33 @@ var Group = {};
  * Returns the `this` reference to the Group object.
  * @param  {!string} name
  * @param  {string} description
+ * @param  {Position} position
  * @return {Group}
  */
-Group.init = function(name, description) {
+Group.init = function(name, description, position) {
     helpers.assert(!_.isEmpty(name), 'group name should not be empty');
-    
+
     this.name = name;
     this.description = description;
-    
+
     this.userMap = new Map();
     this.messages = [];
     this.groupCreator = null; // TODO: once we have login and user identification support
+    this.position = position;
 
     this.id = shortid.generate();
 
     return this;
 };
+
+/**
+ * Returns the position this group was created at
+ * @return {Position}
+ */
+Group.getPosition = function() {
+  return this.position;
+}
+
 
 /**
  * Returns the list of users ids as an array
@@ -77,6 +89,26 @@ Group.addMessages = function(messages) {
     return Array.prototype.push.apply(this.messages, messages);
 };
 
+/**
+ * Finds and returns the distance from the group to the
+ * input position. Returns distance in kilometers.
+ * @param {Position} position
+ * @return {number}
+ */
+Group.distanceInKmFrom = function(position) {
+  return PositionFunctions.distanceInKmBetween(group.position, position);
+};
+
+/**
+ * Finds and returns the distance from the group to the
+ * input position
+ */
+Group.distanceInMilesFrom = function(position) {
+  return PositionFunctions.distanceInMilesBetween(group.position, position);
+};
+
+
+
 // See `toJSON()` section at:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
 // Might be useful in the steps leading up storing into database
@@ -86,6 +118,7 @@ Group.toJSON = function() {
         name: this.name,
         description: this.description,
         userIds: this.getUserIds(),
+        position: this.position,
         messages: this.messages,
         users: this.getUsers(),
         id: this.id

@@ -10,7 +10,6 @@ const lessMiddleware = require('less-middleware');
 const defines = require('./defines');
 
 // adding for passport use
-const exphbs = require('express-handlebars');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const passport = require('passport');
@@ -18,13 +17,15 @@ const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
 // const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
-const funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
+
+const passortHelpers = require('./helpers/passport-functions.js'); // contains our helper functions for our Passport and database work
+
+
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
 const publicDirPath = __dirname + '/public';
-var User       = require('./models/user');
 
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
@@ -37,23 +38,24 @@ sockets(io);
 // see: http://expressjs.com/guide/using-middleware.html
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-//added for passport usage
+// added for passport usage
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(session({secret: 'supernova', saveUninitialized: true, resave: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// sockets middleware
 // make the io object available on every req at `req.io`
 app.use(function(req, res, next) {
     req.io = io;
     next();
 });
 
-//added for passport use
-//Session-persisted message middleware
+// added for passport use
+// Session-persisted message middleware
 app.use(function(req, res, next){
   var err = req.session.error,
       msg = req.session.notice,
@@ -78,22 +80,21 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 //===============PASSPORT=================
 // Passport session setup.
 passport.serializeUser(function(user, done) {
-  console.log("hello"); 
-  console.log("serializing " + user.username);
+  // console.log("passport: serializing ", user);
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-  console.log("deserializing " + obj);
+  // console.log("passport: deserializing ", obj);
   done(null, obj);
 });
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 passport.use(new GoogleStrategy({
-   'clientID'      : '403805483120-n9nfegk2jgdget7r6svcmahas1fqkjtr.apps.googleusercontent.com',
-        'clientSecret'  : 'mvpV2F8ooNA8RH9dlVQYYVxz',
-        'callbackURL'   : 'http://localhost:3000/auth/google/callback'
+    'clientID'      : '403805483120-n9nfegk2jgdget7r6svcmahas1fqkjtr.apps.googleusercontent.com',
+    'clientSecret'  : 'mvpV2F8ooNA8RH9dlVQYYVxz',
+    'callbackURL'   : 'http://localhost:3000/auth/google/callback'
     
   },
   function(accessToken, refreshToken, profile, done) {
@@ -110,40 +111,41 @@ passport.use(new GoogleStrategy({
 ));
 // Use the LocalStrategy within Passport to login/”signin” users.
 passport.use('local-signin', new LocalStrategy(
-  {passReqToCallback : true}, //allows us to pass back the request to the callback
+  {passReqToCallback : true}, // allows us to pass back the request to the callback
   function(req, username, password, done) {
-    funct.localAuth(username, password)
+    passortHelpers.localAuth(username, password)
     .then(function (user) {
       if (user) {
-        console.log("LOGGED IN AS: " + user.username);
-        req.session.success = 'You are successfully logged in ' + user.username + '!';
+        console.log("passport: logged in as: ", user);
+        req.session.success = 'You are successfully logged in ' + user.name + '!';
         done(null, user);
       }
       if (!user) {
-        console.log("COULD NOT LOG IN");
-        req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
+        console.log("passport: could not login in with username: ", username);
+        req.session.error = 'Could not log user in. Please try again.'; // inform user could not log them in
         done(null, user);
       }
     })
-    .fail(function (err){
+    .fail(function (err) {
       console.log(err.body);
     });
   }
 ));
+
 // Use the LocalStrategy within Passport to register/"signup" users.
 passport.use('local-signup', new LocalStrategy(
-  {passReqToCallback : true}, //allows us to pass back the request to the callback
+  {passReqToCallback : true}, // allows us to pass back the request to the callback
   function(req, username, password, done) {
-    funct.localReg(username, password)
+    passortHelpers.localReg(username, password)
     .then(function (user) {
       if (user) {
-        console.log("REGISTERED: " + user.username);
-        req.session.success = 'You are successfully registered and logged in ' + user.username + '!';
+        console.log("passport: registered: ", user);
+        req.session.success = 'You are successfully registered and logged in ' + user.name + '!';
         done(null, user);
       }
       if (!user) {
-        console.log("COULD NOT REGISTER");
-        req.session.error = 'That username is already in use, please try a different one.'; //inform user could not log them in
+        console.log("passport: could not register the username: ", username);
+        req.session.error = 'That username is already in use, please try a different one.'; // inform user could not log them in
         done(null, user);
       }
     })
@@ -198,5 +200,5 @@ var port = process.env.PORT || 3000;
 
 // start the server
 http.listen(port, function(){
-    console.log('listening on *:3000');
+    console.log('listening on *:' + port);
 });

@@ -6,7 +6,6 @@ const shortid = require('shortid');
  */
 var User = {};
 
-
 /**
  * Initialize a User object
  * Auto-generates a unique id
@@ -14,9 +13,8 @@ var User = {};
  * Returns `this` reference to the User object
  * @return {User}
  */
-User.init = function(username,password) {
-    // TODO: once we have login and identification support
-    // a user will have a name, email, photo url, etc.
+User.init = function(username, password) {
+    // TODO: add photo url?
     this.name = username;
     this.id = shortid.generate();
     this.password =password; 

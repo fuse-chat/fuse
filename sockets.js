@@ -6,12 +6,13 @@ const Database = require(app_root_path + '/database');
 database = Object.create(Database).init();
 
 module.exports = function(io) {
-  io.on('connection', function(socket) {
-    socket.on(defines['socket-chat-message'], function(obj) {
-      console.log('message: ' + obj.message.body);
-      var m = Object.create(Message).init(obj.message.body); //TODO: add sender to this?
-      database.addMessageToGroupById(m, obj.message.groupid);
-      io.emit(defines['socket-chat-message'], obj);
+    io.on('connection', function(socket) {
+        // capture incoming message, persist it to db, and emit it to every connected client
+        socket.on(defines['socket-chat-message'], function(obj) {
+            console.log('socket: message: ' + obj.message.body);
+            var m = Object.create(Message).init(obj.message.body); // TODO: add sender to this
+            database.addMessageToGroupById(m, obj.message.groupid);
+            io.emit(defines['socket-chat-message'], obj);
+        });
     });
-  });
 };

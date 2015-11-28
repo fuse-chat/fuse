@@ -64,7 +64,7 @@
         <div class="fc-sidebar-heading">Groups Near You</div>
         <ul class="fc-group-list">
             {{#each groups}}
-                <a class="fc-group-list-item-link" href="/group/{{this.name}}">
+                <a class="fc-group-list-item-link" href="javascript:G.setGroupAsSelected('{{this.name}}')">
                     {{#if this.selected}}
                     <li class="fc-group-list-item" data-name="{{this.name}}" data-id="{{this.id}}" data-selected="true" data-number>
                     {{else }}
