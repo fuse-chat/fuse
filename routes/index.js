@@ -14,55 +14,47 @@ const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
 const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
-//used to collect username 
-var name;
-//used to collect username
-var myModule = require(app_root_path + '/functions.js');
-
-//We will be creating these two files shortly
-// var config = require('./config.js'), //config file contains all tokens and other private info
-//    funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 
 //===============ROUTES=================
-//displays our signup page
+// displays our sign-in/sign-up page
 router.get('/signin', function(req, res){
-  res.render('signin');
+    res.render('signin');
 });
 
-//sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
+// sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
 router.post('/local-reg', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/signin'
-  })
-);
+}));
 
-//sends the request through our local login/signin strategy, and if successful takes user to homepage, otherwise returns then to signin page
+// sends the request through our local login/signin strategy, and if successful takes user to homepage, otherwise returns then to signin page
 router.post('/login', passport.authenticate('local-signin', { 
-  successRedirect: '/',
-  failureRedirect: '/signin'
-  })
-);
+    successRedirect: '/',
+    failureRedirect: '/signin'
+}));
 
-router.get('/auth/facebook', function(req,res){
-	res.render('facebookSignin');
-});
-
-//logs user out of site, deleting them from the session, and returns to homepage
+// logs user out of site, deleting them from the session, and returns to homepage
 router.get('/logout', function(req, res){
-  var name = req.user.username;
-  console.log("LOGGIN OUT " + req.user.username)
-  req.logout();
-  res.redirect('/');
-  req.session.notice = "You have successfully been logged out " + name + "!";
+    console.log("passport: route: logout: logging out ", req.user);
+    var username = req.user.name; // need to capture before calling logout
+    req.logout();
+    req.session.notice = "You have successfully been logged out " + username + "!";
+    res.redirect('/');
 });
 
-//called from facebooksignin.hbs. uses query string parameter passing
+// TODO: incomplete
+// use local sign-in/sign-up instead
+router.get('/auth/facebook', function(req,res){
+    res.render('facebookSignin');
+});
+// called from facebooksignin.hbs. uses query string parameter passing
 router.get('/postSignIn',function(req, res, next) {
     groupsdb.find().toArray(function(err, items) {
         if (err) {
             throw err;
         }
-        name = req.query.id;
+        
+        var name = req.query.id;
         //the username of logfed in user
         
         // set the first one to be the selected one
@@ -70,25 +62,37 @@ router.get('/postSignIn',function(req, res, next) {
         res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name});
     });
 }); 
- 
 
-// TODO: cleanup
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    database.getAllGroups(function(err, items) {
-        if (err) {
-            throw err;
-        }
-        //the username of logfed in user
-        var name1 = myModule.name;
+// GET home page.
+// - If the user is signed in, show all the groups
+// - Redirect to sign in the user
+router.get('/', function(req, res, next) {    
+    if (req.session.passport && req.session.passport.user) { // signed-in
+        console.log('main route: signed in', req.session.passport.user);
 
+        database.getAllGroups(function(err, items) {
+            if (err) {
+                throw err;
+            }
 
-        // set the first one to be the selected one if it exists
-        if(items[0]) {
-          items[0].selected = true;
-        }
-        res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name1});
-    });
+            // set the first one to be the selected one if it exists
+            if (items[0]) {
+                items[0].selected = true;
+            }
+
+            res.render('index', {
+                title: 'Fuse Chat', 
+                groups: items, 
+                selectedGroup: items[0],
+                username: req.session.passport.user.name
+            });
+        });
+    } 
+
+    else {
+        console.log('main route: not signed in');
+        res.redirect('/signin');
+    }
 });
 
 module.exports = router;

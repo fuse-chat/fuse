@@ -21,20 +21,7 @@ defines.API_VERSION = '1';
 defines.DEBUG = true;
 defines.socket = io();
 
-// TODO: This part will be used to fetch the messages for the current group url
-// from the server. Eventually, the code should be moved to router.js and chat.js
-
-var path = document.location && document.location.pathname;
-var pathComponents = path.split(/\//).filter(function(c) {
-    return !_.isEmpty(c);
+document.addEventListener('load', function() {
+    // Initialize notifications for future use
+    Notif.prepare();
 });
-
-if (pathComponents[0] === 'group') {
-    var groupName = pathComponents[1];
-    console.log(groupName);
-    
-    $.get('/api/1/groups/' + groupName, {
-        name: groupName
-    }, function(d) { console.log(d); });
-};
-

@@ -4,6 +4,7 @@ const Group = require(app_root_path + '/models/group.js');
 const express = require('express');
 const router = express.Router();
 const Database = require(app_root_path + '/database');
+const passportHelpers = require(app_root_path + '/helpers/passport-functions.js')
 
 database = Object.create(Database).init();
 // TODO: cleanup
@@ -31,7 +32,9 @@ router.get('/:name', function(req, res) {
           return true;
         }
       });
-      res.render('index', { title: 'Fuse Chat', groups: groups, selectedGroup: selectedGroup });
+      
+      var username = passportHelpers.name;
+      res.render('index', { title: 'Fuse Chat', groups: groups, selectedGroup: selectedGroup, username: username });
     });
   });
 });
