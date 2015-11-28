@@ -123,9 +123,9 @@
             </div>
             <div class="form-group">
                 <label>Hotwords</label>
-                <textarea class="form-control fc-preferences-hotwords" type="text" placeholder="pizza, hitchhiking, tea, liverpool fc"></textarea>
+                <textarea class="form-control fc-preferences-hotwords" type="text" placeholder="pizza, hitchhiking, tea, liverpool fc">{{#if preferences}}{{#if preferences.hotwords}}{{#each preferences.hotwords}}{{this}}, {{/each}}{{/if}}{{/if}}</textarea>
                 <div class="checkbox">
-                  <label><input type="checkbox" value="" class="fc-preferences-notifications">Show notifications</label>
+                  <label><input type="checkbox" checked="{{#if preferences}}{{#if preferences.notifications}}{{preferences.notifications}}{{/if}}{{/if}}" class="fc-preferences-notifications">Show notifications</label>
                 </div>
             </div>
             <div class="modal-footer">

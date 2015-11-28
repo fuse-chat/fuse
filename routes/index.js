@@ -94,7 +94,8 @@ router.get('/', function(req, res, next) {
                 title: 'Fuse Chat', 
                 groups: items, 
                 selectedGroup: items[0],
-                username: req.session.passport.user.name
+                username: req.session.passport.user.name,
+                preferences: req.session.passport.user.preferences
             });
         });
     } 

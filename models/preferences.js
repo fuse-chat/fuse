@@ -10,7 +10,7 @@ var Preferences = {};
  * @return {Preferences}
  */
 Preferences.init = function() {
-    this.hotwords = new Set();
+    this.hotwords = [];
     this.notifications = false;
     return this;
 };
@@ -24,7 +24,11 @@ Preferences.addHotword = function(h) {
         h = [h];
     }
 
-    Set.prototype.add.apply(this.hotwords, h);
+    h.forEach(function(hotword) {
+        if (this.hotwords.indexOf(hotword) === -1) {
+            this.hotwords.push(hotword);        
+        }
+    });
 };
 
 /**
@@ -36,14 +40,12 @@ Preferences.removeHotword = function(h) {
         h = [h];
     }
 
-    Set.prototype.delete.apply(this.hotwords, h);
-};
-
-Preferences.toJSON = function() {
-    return {
-        notifications: this.notifications,
-        hotwords: Array.from(this.hotwords)
-    };
+    h.forEach(function(hotword) {
+        var idx = this.hotwords.indexOf(hotword);
+        if (idx !== -1) {
+            this.hotwords.splice(idx, 1);
+        }
+    });
 };
 
 module.exports = Preferences;

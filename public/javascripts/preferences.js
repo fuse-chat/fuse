@@ -3,8 +3,6 @@
 // - handle ui/data for input and changes of user preferences
 // - keep user preferences in sync with the server
 
-// TODO
-
 var Pref = {};
 
 defines['preferences-url-base'] = `/api/${defines.API_VERSION}/preferences`;
@@ -21,12 +19,12 @@ Pref.isNotificationsEnabled = function() {
 };
 
 /**
- * Returns a set of the user's hotwords
- * @return {Set<string>}
+ * Returns an array of the user's hotwords
+ * @return {Array<string>}
  */
 Pref.hotwords = function() {
     var hotwordsBox = document.querySelector(Pref.HOTWORDS_NODE_SELECTOR);
-    return new Set(hotwordsBox.value.split(',').map(s => s.trim()));
+    return hotwordsBox.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
 };
 
 Pref.updateLocal = function(preferences) {
@@ -59,9 +57,11 @@ Pref.handleSave = function() {
     var hotwordsBox = document.querySelector(Pref.HOTWORDS_NODE_SELECTOR);
     var preferences = {
         notifications: notificationCheckBox.checked,
-        hotwords: hotwordsBox.value.split(',').map(s => s.trim())
+        hotwords: hotwordsBox.value.split(',').map(s => s.trim()).filter(s => s.length > 0)
     };
 
+    // TODO:nishanths: opportunity for failure here if saving is not successful
+    // Not a top priority fix right now, I guess.
     Pref.saveToServer(preferences, function() {
         Pref.updateLocal(preferences);
     });
