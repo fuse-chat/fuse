@@ -16,18 +16,15 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
-const GoogleStrategy = require('passport-google');
+// const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
 const funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
-
-
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
-
 const publicDirPath = __dirname + '/public';
-
+var User       = require('./models/user');
 
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
@@ -91,6 +88,26 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+passport.use(new GoogleStrategy({
+   'clientID'      : '403805483120-n9nfegk2jgdget7r6svcmahas1fqkjtr.apps.googleusercontent.com',
+        'clientSecret'  : 'mvpV2F8ooNA8RH9dlVQYYVxz',
+        'callbackURL'   : 'http://localhost:3000/auth/google/callback'
+    
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+  }
+));
 // Use the LocalStrategy within Passport to login/”signin” users.
 passport.use('local-signin', new LocalStrategy(
   {passReqToCallback : true}, //allows us to pass back the request to the callback
@@ -135,6 +152,7 @@ passport.use('local-signup', new LocalStrategy(
     });
   }
 ));
+
 
 // main routes
 app.use('/', require('./routes/index'));

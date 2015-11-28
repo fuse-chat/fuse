@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const app_root_path = require('app-root-path').path;
 const Database = require(app_root_path + '/database');
+var util = require('util');
 
 var database = Object.create(Database).init();
 const mongo = require('mongoskin');
@@ -16,6 +17,7 @@ const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
 //used to collect username 
 var name;
+var logout = false;
 //used to collect username
 var myModule = require(app_root_path + '/functions.js');
 
@@ -26,8 +28,19 @@ var myModule = require(app_root_path + '/functions.js');
 //===============ROUTES=================
 //displays our signup page
 router.get('/signin', function(req, res){
-  res.render('signin');
+	logout = false;
+	res.render('signin');
 });
+
+router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+
+    // the callback after google has authenticated the user
+    router.get('/auth/google/callback',
+            passport.authenticate('google', {
+                    successRedirect : '/',
+                    failureRedirect : '/login'
+            }));
+
 
 //sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
 router.post('/local-reg', passport.authenticate('local-signup', {
@@ -48,13 +61,20 @@ router.get('/auth/facebook', function(req,res){
 });
 
 //logs user out of site, deleting them from the session, and returns to homepage
-router.get('/logout', function(req, res){
-  var name = req.user.username;
-  console.log("LOGGIN OUT " + req.user.username)
-  req.logout();
-  res.redirect('/');
-  req.session.notice = "You have successfully been logged out " + name + "!";
+router.get('/logout', function (req, res){
+	logout = true;
+	req.logOut();
+	req.session.destroy(function (err) {
+    res.redirect('/'); //Inside a callback… bulletproof!
+  });
 });
+// router.get('/logout', function(req, res){
+//   // var name = req.user.username;
+//   // console.log("LOGGIN OUT " + req.user.username)
+//   req.logout();
+//   res.redirect('/');
+//   //req.session.notice = "You have successfully been logged out " + name + "!";
+// });
 
 //called from facebooksignin.hbs. uses query string parameter passing
 router.get('/postSignIn',function(req, res, next) {
@@ -81,8 +101,8 @@ router.get('/', function(req, res, next) {
         }
         //the username of logfed in user
         var name1 = myModule.name;
-
-
+         //res.render('home', {user: req.user});
+         if (logout){name1=null;}
         // set the first one to be the selected one if it exists
         if(items[0]) {
           items[0].selected = true;

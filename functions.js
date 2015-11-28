@@ -89,4 +89,3 @@ exports.localReg = function (username, password) {
      })
      return deferred.promise;
     };
-  
