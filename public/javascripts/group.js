@@ -165,12 +165,11 @@ createGroupButton.addEventListener('click', function(e) {
     });
 });
 
-
 // handle newly created group events from the server
 defines.socket.on(defines['socket-group-created'], function(data) {
   Geo.groupWithinDistance(data, function(isWithinDistance) {
     if(isWithinDistance) {
-      console.log("Within distance");
+      console.log("Within distance", data);
       G.addToSidebar(data);
     }
   });
@@ -179,11 +178,5 @@ defines.socket.on(defines['socket-group-created'], function(data) {
 // handle group removed events from the server
 defines.socket.on(defines['socket-group-removed'], function(data) {
     // TODO
-    console.log(data);
+    console.log('TODO: group removed', data);
 });
-
-G.start = function() {
-    // G.refreshGroupListNames();
-};
-
-// G.start();
