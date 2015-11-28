@@ -141,7 +141,7 @@ Database.getUserById = function(userId, callback) {
  * @param {string} userId
  */
 Database.setPreferencesForUserId = function(preferences, userId) {
-  this.userdb.update({id: userId}, {'$set': {preferences: preferences}, function(err, item) {
+  this.userdb.update({id: userId}, {'$set': {preferences: preferences}}, function(err, item) {
     if (err) {
       throw err;
     }

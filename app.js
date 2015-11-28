@@ -159,6 +159,7 @@ passport.use('local-signup', new LocalStrategy(
 app.use('/', require('./routes/index'));
 app.use('/group', require('./routes/group'));
 app.use('/api/1/groups', require('./routes/api/1/groups'));
+app.use('/api/1/preferences', require('./routes/api/1/preferences'));
 
 // if none of routes above match
 // catch 404 and forward to error handler

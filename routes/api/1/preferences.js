@@ -28,17 +28,17 @@ router.get('/', function(req, res) {
 /**
  * Set the preferences for the logged-in user
  *
- * Request body should have a `preferences` paramater that is a JSON-ified string of the preferences
+ * Request body should have a `preferences` paramater that is a JSON-ified string of the preferences.
  * preferences: {!string}
  */
 router.post('/', function(req, res) {
-  var currentUser = passportHelpers(req);
+  var currentUser = passportHelpers.currentUser(req);
   if (currentUser == null) { // not signed-in
     throw new Error('not signed in');
   }
 
   var userId = currentUser.id;
-  var preferences = JSON.parse(req.body.preferences);
+  var preferences = req.body.preferences;
   database.setPreferencesForUserId(preferences, userId);
 
   res.json({ok: true});

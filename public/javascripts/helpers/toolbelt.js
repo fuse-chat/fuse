@@ -48,7 +48,7 @@
         obj = _.clone(obj);
 
         Object.keys(normal).forEach(function(key) {
-            if (defines.DEBUG && !Object.hasOwnProperty(key)) {
+            if (defines.DEBUG && !obj.hasOwnProperty(key)) {
                 console.warn(`expected key: ${key} missing in object:`, obj)
             }
 
