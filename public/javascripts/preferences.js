@@ -16,7 +16,8 @@ Pref.HOTWORDS_NODE_SELECTOR = ".modal#fc-preferences .fc-preferences-hotwords";
  * @return {boolean}
  */
 Pref.isNotificationsEnabled = function() {
-    return false;
+    var notificationCheckBox = document.querySelector(Pref.NOTIFICATION_NODE_SELECTOR);
+    return notificationCheckBox.checked;
 };
 
 /**
@@ -24,7 +25,8 @@ Pref.isNotificationsEnabled = function() {
  * @return {Set<string>}
  */
 Pref.hotwords = function() {
-    return new Set();
+    var hotwordsBox = document.querySelector(Pref.HOTWORDS_NODE_SELECTOR);
+    return new Set(hotwordsBox.value.split(',').map(s => s.trim()));
 };
 
 Pref.updateLocal = function(preferences) {
