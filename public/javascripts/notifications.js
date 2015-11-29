@@ -18,17 +18,14 @@ Notif.show = function(title, body, icon) {
 };
 
 // Scan incoming messages for hotword
-// and if notifications are on, show a desktop notification
+// and if notifications are on and message is not from self, show a desktop notification
 defines.socket.on(defines['socket-chat-message'], function(obj) {
-    // TODO: filter out messages from self
-    
-    if (Pref.isNotificationsEnabled()) {
-        var messageBody = obj.message.body;
+    if (Pref.isNotificationsEnabled() && obj.senderId !== document.querySelector('body').dataset['userid']) {
         var hotwords = Pref.hotwords();
 
         var matchedHotword;
         var match = hotwords.some(function(hotword) {
-            if (messageBody.indexOf(hotword) !== -1) {
+            if (obj.messageBody.indexOf(hotword) !== -1) {
                 matchedHotword = hotword;
                 return true;
             }
@@ -37,7 +34,7 @@ defines.socket.on(defines['socket-chat-message'], function(obj) {
         });
 
         if (match) {
-            Notif.show(`New message with hotword: ${matchedHotword}!`, messageBody);
+            Notif.show(`New message with hotword "${matchedHotword}"`, obj.messageBody);
         }
     }
 });

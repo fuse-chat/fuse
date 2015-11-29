@@ -67,7 +67,7 @@ router.get('/postSignIn',function(req, res, next) {
         
         // set the first one to be the selected one
         // items[0].selected = true;
-        res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name});
+        res.render('index', { title: 'Fuse Chat', groups: items, selectedGroup: items[0], username: name });
     });
 }); 
 
@@ -94,8 +94,9 @@ router.get('/', function(req, res, next) {
                 title: 'Fuse Chat', 
                 groups: items, 
                 selectedGroup: items[0],
-                username: req.session.passport.user.name,
-                preferences: req.session.passport.user.preferences
+                username: user.name,
+                user: user,
+                preferences: user.preferences
             });
         });
     } 

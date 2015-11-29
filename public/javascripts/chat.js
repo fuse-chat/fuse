@@ -10,16 +10,27 @@ var messageInput = document.querySelector('#fc-m');
 var messages = document.querySelector('#fc-messages');
 console.log(form, messages, messageInput)
 
-form.addEventListener('submit', function(e) {
-	var groupID;
-	var senderID; //TODO: We need login or some way of distinguishing different users
+const Chat = {};
 
+Chat.makeMessageNode = function(obj) {
+    var node = document.createElement('li');
+    node.textContent = obj.senderId + ': ' + obj.messageBody;
+    return node;
+};
+
+form.addEventListener('submit', function(e) {
     var node = G.queryGroupSelected();
 	if (node == null) return toolbelt.event.stop(e);
 
-	groupID = node.dataset.id;
+	var groupId = node.dataset.id;
+    var senderId = document.querySelector('body').dataset['userid'];
 
-    defines.socket.emit(defines['socket-chat-message'], { message: { body: messageInput.value, groupid: groupID, senderid: senderID} });
+    defines.socket.emit(defines['socket-chat-message'], { 
+        messageBody: messageInput.value,
+        groupId: groupId,
+        senderId: senderId
+    });
+
     messageInput.value = '';
     return toolbelt.event.stop(e);
 });
@@ -28,9 +39,7 @@ defines.socket.on(defines['socket-chat-message'], function(obj) {
     var node = G.queryGroupSelected();
 	if (node == null) return;
 
-	if(node.dataset.id === obj.message.groupid){
-		var li = document.createElement('li');
-		li.textContent = obj.message.body;
-		messages.appendChild(li);
+	if (node.dataset.id === obj.groupId) {
+		messages.appendChild(Chat.makeMessageNode(obj));
 	}
 });
