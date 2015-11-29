@@ -39,11 +39,21 @@ router.get('/:name', function(req, res) {
 
             var username;      
             var currentUser = passportHelpers.currentUser(req);
-            if (currentUser != null) {
-                username = currentUser.name;
+
+            if (currentUser == null) {
+                throw new Error('not signed in')
             }
 
-            res.render('index', { title: 'Fuse Chat', groups: groups, selectedGroup: selectedGroup, username: username });
+            username = currentUser.name;
+
+            res.render('index', { 
+                title: 'Fuse Chat', 
+                groups: groups, 
+                selectedGroup: selectedGroup, 
+                username: username,
+                user: currentUser,
+                preferences: currentUser && currentUser.preferences
+            });
         });
     });
 });

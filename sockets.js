@@ -7,12 +7,23 @@ database = Object.create(Database).init();
 
 module.exports = function(io) {
     io.on('connection', function(socket) {
-        // capture incoming message, persist it to db, and emit it to every connected client
+        // handle incoming messages
         socket.on(defines['socket-chat-message'], function(obj) {
-            console.log('socket: message: ' + obj.message.body);
-            var m = Object.create(Message).init(obj.message.body); // TODO: add sender to this
-            database.addMessageToGroupById(m, obj.message.groupid);
-            io.emit(defines['socket-chat-message'], obj);
+            console.log('socket: message: ' + obj.messageBody);
+
+            // get the sender of the message
+            // create a message with the sender field initialized
+            // add the message to the correct group in the db
+            database.getUserById(obj.senderId, function(err, user) {
+                if (err) {
+                    throw err;
+                }
+
+                var message = Object.create(Message).init(obj.messageBody, user);
+                database.addMessageToGroupById(message, obj.groupId);
+                
+                io.emit(defines['socket-chat-message'], obj);
+            });
         });
     });
 };

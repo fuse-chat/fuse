@@ -14,7 +14,7 @@
         {{!-- favicon --}}
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     </head>
-    <body>
+    <body {{#if user}}data-userid="{{user.id}}"{{/if}}>
         {{!-- the contents of the file that's rendered by a res.render('file') call in routes
            replaces {{body}} below --}}
         {{{body}}}
