@@ -99,7 +99,10 @@
                 <div class="message-wrapper">
                     <div class="photo" style="background-image:url({{this.sender.photoUrl}})"></div>
                     <div>
-                        <div class="sender">{{this.sender.name}}</div>
+                        <div class="upper-row">
+                            <div class="sender">{{this.sender.name}}</div>
+                            <div class="timestamp">{{toHumanDate this.timestamp}}</div>
+                        </div>
                         <div class="message">{{this.body}}</div>
                     </div>
                 </div>

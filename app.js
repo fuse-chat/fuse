@@ -6,7 +6,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const lessMiddleware = require('less-middleware');
-
+const exphbs = require('express-handlebars');
 const defines = require('./defines');
 
 // adding for passport use
@@ -30,6 +30,15 @@ const userNotificationsManager = require('./user-notifications-manager.js');
 
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
+
+var hbs = exphbs.create({
+    helpers: require('./helpers/handlebars.js'),
+    extname: '.hbs',
+    layoutsDir: './views/',
+    defaultLayout: 'layout'
+});
+
+app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 // socket.io events
