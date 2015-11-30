@@ -20,7 +20,10 @@ const passportHelpers = require(app_root_path + '/helpers/passport-functions.js'
 //===============ROUTES=================
 // displays our sign-in/sign-up page
 router.get('/signin', function(req, res){
-	res.render('signin');
+	res.render('signin', {
+        title: 'Sign in to Fuse Chat',
+        layout: 'layouts/signin'
+    });
 });
 
 router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
@@ -96,6 +99,7 @@ router.get('/', function(req, res, next) {
                 selectedGroup: items[0],
                 username: user.name,
                 user: user,
+                bellNotifications: user.bellNotifications.slice().reverse(),
                 preferences: user.preferences
             });
         });

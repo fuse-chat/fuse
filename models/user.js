@@ -20,6 +20,7 @@ User.init = function(username, password) {
     this.id = shortid.generate();
     this.password = password; 
     this.preferences = Object.create(Preferences).init();
+    this.bellNotifications = [];
     return this;
 };
 

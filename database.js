@@ -148,4 +148,20 @@ Database.setPreferencesForUserId = function(preferences, userId) {
   });
 };
 
+Database.addBellNotificationToUserById = function(obj, userId) {
+  this.userdb.update({id: userId}, {'$push':{bellNotifications:obj}}, function(err, item) {
+    if (err) {
+      throw err;
+    }
+  });
+};
+
+/**
+ * Get all users as Array
+ * @param  {Function} callback
+ */
+Database.getAllUsers = function(callback) {
+  this.userdb.find().toArray(callback);
+};
+
 module.exports = Database;

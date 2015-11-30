@@ -26,12 +26,19 @@ const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
 const publicDirPath = __dirname + '/public';
 
+const userNotificationsManager = require('./user-notifications-manager.js');
+
 // view engine setup - currently uses Handlebars
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // socket.io events
+
+// TODO: rename to a more specific name that pertains to its purpose (for ex: chat-hub)
 sockets(io);
+
+// handle socket chat events for notifications
+userNotificationsManager(io);
 
 // middleware
 // see: http://expressjs.com/guide/using-middleware.html
@@ -94,7 +101,6 @@ passport.use(new GoogleStrategy({
     'clientID'      : '403805483120-n9nfegk2jgdget7r6svcmahas1fqkjtr.apps.googleusercontent.com',
     'clientSecret'  : 'mvpV2F8ooNA8RH9dlVQYYVxz',
     'callbackURL'   : 'http://localhost:3000/auth/google/callback'
-    
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
