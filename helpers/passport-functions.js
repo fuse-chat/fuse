@@ -26,7 +26,7 @@ exports.localReg = function (username, password) {
           
           // insert user into db
           var user = Object.create(User).init(username, hash);
-          userdb.insert(user1, function(err, result) {
+          userdb.insert(user, function(err, result) {
                 if (err) {
                     console.log("passport: throwing error");
                     throw err;
