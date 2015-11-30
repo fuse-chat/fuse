@@ -16,17 +16,13 @@ Chat.makeMessageNode = function(obj) {
     var parent = document.createElement('div');
     parent.classList.add('message-wrapper');
 
-    var senderNode = document.createElement('div');
-    var messageNode = document.createElement('div');
-    senderNode.classList.add('sender');
-    messageNode.classList.add('message');
-
-    senderNode.textContent = obj.sender.name;
-    messageNode.textContent = obj.messageBody;
-
-    parent.appendChild(senderNode);
-    parent.appendChild(messageNode);
-
+    parent.innerHTML = `
+    <div class="photo" style="background-image:url(${obj.sender.photoUrl})"></div>
+    <div>
+        <div class="sender">${obj.sender.name}</div>
+        <div class="message">${obj.messageBody}</div>
+    </div>
+    `
     return parent;
 };
 
