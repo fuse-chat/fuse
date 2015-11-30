@@ -22,6 +22,8 @@ module.exports = function(io) {
                 var message = Object.create(Message).init(obj.messageBody, user);
                 database.addMessageToGroupById(message, obj.groupId);
                 
+                obj.sender = user;
+                
                 io.emit(defines['socket-chat-message'], obj);
             });
         });

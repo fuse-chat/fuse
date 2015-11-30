@@ -41,7 +41,8 @@ router.get('/:name', function(req, res) {
             var currentUser = passportHelpers.currentUser(req);
 
             if (currentUser == null) {
-                throw new Error('not signed in')
+                res.redirect('/signin');
+                return;
             }
 
             username = currentUser.name;

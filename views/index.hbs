@@ -82,7 +82,10 @@
         {{!-- the list of messages --}}
         <ul id="fc-messages">
             {{#each selectedGroup.messages}}
-                <li>{{this.body}}</li>
+                <div class="message-wrapper">
+                    <div class="sender">{{this.sender.name}}</div>
+                    <div class="message">{{this.body}}</div>
+                </div>
             {{/each}}
         </ul>
         {{!-- the area to type new messages into --}}
