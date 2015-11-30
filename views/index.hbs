@@ -88,12 +88,19 @@
     </div>
     {{!-- the right side chat view --}}
     <div class="fc-chat-view">
+        <div class="jumbotron group-info">
+          <h1>{{selectedGroup.name}}</h1>
+          <p></p>
+        </div>
         {{!-- the list of messages --}}
         <ul id="fc-messages">
             {{#each selectedGroup.messages}}
                 <div class="message-wrapper">
-                    <div class="sender">{{this.sender.name}}</div>
-                    <div class="message">{{this.body}}</div>
+                    <div class="photo" style="background-image:url({{this.sender.photoUrl}})"></div>
+                    <div>
+                        <div class="sender">{{this.sender.name}}</div>
+                        <div class="message">{{this.body}}</div>
+                    </div>
                 </div>
             {{/each}}
         </ul>

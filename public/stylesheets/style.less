@@ -1,12 +1,8 @@
 @text-white: #ddd;
 @fc-left-sidebar-width: 15%;
 
-#fc-message-form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
 #fc-message-form button { float: left; width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px;}
 #fc-messages { list-style-type: none; margin: 0; padding: 0; }
-#fc-messages .message-wrapper { padding: 5px 10px; }
-#fc-messages .message-wrapper:nth-child(odd) { background: #eee; }
-.form-control#fc-m { float: left; width: 75%; border: 0; padding: 10px; margin-right: .5%; }
 
 html {
     height: 100%;
@@ -26,35 +22,15 @@ body {
 // ==================================================
 // Sign in
 
-.jumbotron.sign-in-container {
-    padding: 4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100%;
-    min-height: 100vh;
-    background-color: white;
-    
-    i.fa {
-        margin-right: 1rem;
-        font-size: 1.75rem;
-    }
-
-    #local-reg, #local-sign-in {
-        padding-top: 2rem;
-
-        &.control-label {
-            float: none;
-        }
-    }
-}
+@import 'sign-in';
 
 a, a:visited, a:hover, a:focus, a:active {
     text-decoration: none;
 }
 
 .fc-main-container {
-    margin-top: @navbar-height;
+    position: relative;
+    top: @navbar-height;
     min-height: 100%;
     height: 100%;
     display: flex;
@@ -62,14 +38,41 @@ a, a:visited, a:hover, a:focus, a:active {
 }
 
 // ==================================================
+// Group info jumbotron
+
+.fc-chat-view {
+    position: relative;
+    left: @fc-left-sidebar-width;
+
+    .group-info {
+        padding: 2rem;
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+}
+
+// ==================================================
 // The sidebar on the right
 // Has lists and headings for lists
 
 .fc-sidebar {
+    position: fixed;
     width: @fc-left-sidebar-width;
     background-color: @gray-dark;
     color: @text-white;
     min-height: 100%;
+    max-height: 100%;
+    
+    &:hover {
+        overflow-y: auto;
+    }
+
+    ul {
+        background-color: @gray-dark;
+        margin: 0;
+    }
 }
 
 .fc-sidebar-heading {
@@ -77,6 +80,35 @@ a, a:visited, a:hover, a:focus, a:active {
     font-weight: 700;
     color: @gray-light;
     margin: 1.5rem 1.5rem 1rem 1.5rem;
+}
+
+// ==================================================
+// Individual message
+
+#fc-messages {
+    .message-wrapper {
+        font-size: 14px;
+        padding: 5px 10px;
+        display: flex;
+        flex-direction: row;
+        
+        .photo {
+            background-size: 40px;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 40px;
+            width: 40px;
+            margin-right: 1rem;
+        }
+
+        .sender {
+            font-weight: 700;
+        }
+
+        .timestamp {
+
+        }
+    }
 }
 
 // ======================================================
@@ -130,6 +162,30 @@ a.fc-group-list-item-link {
 .fc-chat-view {
     width: 100% - @fc-left-sidebar-width;
 }
+
+// ======================================================
+// Chat input
+
+.chat-input {
+    padding: 3px; 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%;
+
+    form {
+        display: flex;
+    }
+    
+    input {
+        margin: 0;
+        float: left; width: 75%; border: 0; padding: 10px;
+    }
+
+    button {
+        flex-grow: 1;
+    }
+}
+
 
 // override yeti
 nav.navbar.navbar-inverse {
