@@ -22,6 +22,7 @@ Message.init = function(body, sender) {
     this.body = body;
     this.sender = sender;
     this.id = shortid.generate();
+    this.timestamp = Date.now();
 
     return this;
 };
