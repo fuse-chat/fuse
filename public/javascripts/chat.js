@@ -13,9 +13,21 @@ console.log(form, messages, messageInput)
 const Chat = {};
 
 Chat.makeMessageNode = function(obj) {
-    var node = document.createElement('li');
-    node.textContent = obj.senderId + ': ' + obj.messageBody;
-    return node;
+    var parent = document.createElement('div');
+    parent.classList.add('message-wrapper');
+
+    var senderNode = document.createElement('div');
+    var messageNode = document.createElement('div');
+    senderNode.classList.add('sender');
+    messageNode.classList.add('message');
+
+    senderNode.textContent = obj.sender.name;
+    messageNode.textContent = obj.messageBody;
+
+    parent.appendChild(senderNode);
+    parent.appendChild(messageNode);
+
+    return parent;
 };
 
 form.addEventListener('submit', function(e) {

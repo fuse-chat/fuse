@@ -23,8 +23,4 @@ User.init = function(username, password) {
     return this;
 };
 
-User.toJSON = function() {
-    return this; // default implementation for now
-};
-
 module.exports = User;

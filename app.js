@@ -20,7 +20,6 @@ const FacebookStrategy = require('passport-facebook');
 
 const passortHelpers = require('./helpers/passport-functions.js'); // contains our helper functions for our Passport and database work
 
-
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
