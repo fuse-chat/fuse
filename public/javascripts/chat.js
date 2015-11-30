@@ -33,6 +33,10 @@ form.addEventListener('submit', function(e) {
 	var groupId = node.dataset.id;
     var senderId = document.querySelector('body').dataset['userid'];
 
+    if (messageInput.value.trim().length === 0) {
+        return toolbelt.event.stop(e);
+    }
+
     defines.socket.emit(defines['socket-chat-message'], { 
         messageBody: messageInput.value,
         groupId: groupId,
