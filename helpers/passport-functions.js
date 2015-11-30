@@ -13,10 +13,6 @@ const userdb = db.collection('user');
 exports.localReg = function (username, password) {
     var deferred = Q.defer();
     var hash = bcrypt.hashSync(password, 8);
-    var user = {
-        "username": username,
-        "password": hash,
-    };
   
     // check if username is already assigned in our database
     userdb.findOne({ name: username}, function(err, item) {
@@ -26,10 +22,10 @@ exports.localReg = function (username, password) {
 
         // if item does not exist
         if (!item) {
-          console.log("passport: Username not found:", username);
+          console.log("passport: Username not registered:", username);
           
           // insert user into db
-          var user1 = Object.create(User).init(username, hash);
+          var user = Object.create(User).init(username, hash);
           userdb.insert(user1, function(err, result) {
                 if (err) {
                     console.log("passport: throwing error");

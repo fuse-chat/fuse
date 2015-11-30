@@ -96,6 +96,7 @@ router.get('/', function(req, res, next) {
                 selectedGroup: items[0],
                 username: user.name,
                 user: user,
+                bellNotifications: user.bellNotifications.slice().reverse(),
                 preferences: user.preferences
             });
         });
