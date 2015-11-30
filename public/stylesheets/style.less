@@ -1,10 +1,8 @@
 @text-white: #ddd;
 @fc-left-sidebar-width: 15%;
 
-#fc-message-form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
 #fc-message-form button { float: left; width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px;}
 #fc-messages { list-style-type: none; margin: 0; padding: 0; }
-.form-control#fc-m { float: left; width: 75%; border: 0; padding: 10px; margin-right: .5%; }
 
 html {
     height: 100%;
@@ -43,6 +41,9 @@ a, a:visited, a:hover, a:focus, a:active {
 // Group info jumbotron
 
 .fc-chat-view {
+    position: relative;
+    left: @fc-left-sidebar-width;
+
     .group-info {
         padding: 2rem;
 
@@ -57,10 +58,16 @@ a, a:visited, a:hover, a:focus, a:active {
 // Has lists and headings for lists
 
 .fc-sidebar {
+    position: fixed;
     width: @fc-left-sidebar-width;
     background-color: @gray-dark;
     color: @text-white;
     min-height: 100%;
+    max-height: 100%;
+    
+    &:hover {
+        overflow-y: auto;
+    }
 
     ul {
         background-color: @gray-dark;
@@ -155,6 +162,30 @@ a.fc-group-list-item-link {
 .fc-chat-view {
     width: 100% - @fc-left-sidebar-width;
 }
+
+// ======================================================
+// Chat input
+
+.chat-input {
+    padding: 3px; 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%;
+
+    form {
+        display: flex;
+    }
+    
+    input {
+        margin: 0;
+        float: left; width: 75%; border: 0; padding: 10px;
+    }
+
+    button {
+        flex-grow: 1;
+    }
+}
+
 
 // override yeti
 nav.navbar.navbar-inverse {
