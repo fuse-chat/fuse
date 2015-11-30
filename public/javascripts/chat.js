@@ -19,7 +19,10 @@ Chat.makeMessageNode = function(obj) {
     parent.innerHTML = `
     <div class="photo" style="background-image:url(${obj.sender.photoUrl})"></div>
     <div>
-        <div class="sender">${obj.sender.name}</div>
+        <div class="upper-row">
+            <div class="sender">${obj.sender.name}</div>
+            <div class="timestamp">${new Date(obj.message.timestamp).toString()}</div>
+        </div>
         <div class="message">${obj.messageBody}</div>
     </div>
     `
