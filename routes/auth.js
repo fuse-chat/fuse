@@ -15,7 +15,6 @@ const GoogleStrategy = require('passport-google');
 const FacebookStrategy = require('passport-facebook');
 const passportHelpers = require(app_root_path + '/helpers/passport-functions.js');
 
-//===============ROUTES=================
 // displays our sign-in/sign-up page
 router.get('/signin', function(req, res){
     res.render('signin', {
@@ -32,7 +31,7 @@ router.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect : '/login'
 }));
 
-//sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
+// sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
 router.post('/local-reg', passport.authenticate('local-signup', {
     successRedirect: '/',
     failureRedirect: '/signin'
@@ -45,7 +44,7 @@ router.post('/login', passport.authenticate('local-signin', {
 }));
 
 
-//logs user out of site, deleting them from the session, and returns to homepage
+// logs user out of site, deleting them from the session, and returns to homepage
 router.get('/logout', function (req, res) {
     req.logOut();
     req.session.destroy(function (err) {
