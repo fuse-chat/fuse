@@ -11,18 +11,21 @@ const database = Object.create(Database).init();
  * Get preferences for logged-in user
  */
 router.get('/', function(req, res) {
-  var currentUser = passportHelpers(req);
-  if (currentUser == null) { // not signed-in
-    throw new Error('not signed in');
+  var user = passportHelpers.currentUser(req);
+  
+  if (user != null) { // not signed-in
+    database.getUserById(user.id, function(err, user) {
+        if (err) {
+          throw err;
+        }
+
+        res.json(user.preferences);
+      });
   }
 
-  database.getUserById(currentUser.id, function(err, user) {
-    if (err) {
-      throw err;
-    }
-
-    res.json(user);
-  });
+  else {
+    res.status(403).send('Access denied');
+  }
 });
 
 /**
@@ -32,16 +35,19 @@ router.get('/', function(req, res) {
  * preferences: {!string}
  */
 router.post('/', function(req, res) {
-  var currentUser = passportHelpers.currentUser(req);
-  if (currentUser == null) { // not signed-in
-    throw new Error('not signed in');
+  var user = passportHelpers.currentUser(req);
+  
+  if (user != null) { // not signed-in
+    var userId = user.id;
+    var preferences = req.body.preferences;
+    database.setPreferencesForUserId(preferences, userId);
+
+    res.json({ok: true});
   }
 
-  var userId = currentUser.id;
-  var preferences = req.body.preferences;
-  database.setPreferencesForUserId(preferences, userId);
-
-  res.json({ok: true});
+  else {
+    res.status(403).send('Access denied');
+  }
 });
 
 

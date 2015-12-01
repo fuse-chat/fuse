@@ -48,18 +48,16 @@ exports.localReg = function (username, password) {
     return deferred.promise;
 };
 
-// TODO: Local Authorizing
-// INFO: Is this still a TODO?
 exports.localAuth=function(username, password){
     var deferred = Q.defer();
 
     userdb.findOne({name: username}, function(err, item){
-        if(err){
+        if(err) {
             throw err;
         }
         
-        if (item){
-            console.log("passport: FOUND USER");
+        if (item) {
+            console.log("passport: found user with username:", username);
             var hash = item.password;
             
             // check password match
@@ -70,7 +68,7 @@ exports.localAuth=function(username, password){
             }
         }
         if(!item) {
-            console.log ("passport: Could not find user in db for signin");
+            console.log ("passport: Could not find user in db for signin:", username);
             deferred.resolve(false);
         }
     });
@@ -78,8 +76,15 @@ exports.localAuth=function(username, password){
     return deferred.promise;
 };
 
-// Extract the current user from a req object
+/**
+ * Extract the current user from a req object
+ * @param {Object} req An express request object
+ */
 exports.currentUser = function(req) {
+    if (req == null) {
+        throw new Error('missing argument req');
+    }
+
     return req.session.passport && req.session.passport.user;
 };
 
