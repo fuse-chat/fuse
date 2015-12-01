@@ -3,6 +3,7 @@ const Database = require('./database.js');
 const database = Object.create(Database).init();
 
 const MillisecondsInOneDay = 24*60*60*1000;
+const Days = 1;
 
 module.exports = function() {
     new CronJob('0 * * * *', function() {
@@ -14,7 +15,12 @@ module.exports = function() {
 
         var current = Date.now();
         groups.forEach(function(group) {
-            if ((current - group.timestamp) > 2*MillisecondsInOneDay) {
+            var lastMessage = group.messages.length > 0 ? group.messages[group.messages.length-1] : null;
+            if (lastMessage == null) {
+                return;
+            }
+
+            if ((current - lastMessage.timestamp) > Days*MillisecondsInOneDay) {
                 (function() {
                     database.deleteGroupById({id: group.id}, function(err, res) {
                         if (err) {

@@ -22,6 +22,5 @@ defines.DEBUG = true;
 defines.socket = io();
 
 window.addEventListener('load', function() {
-    // Initialize notifications for future use
-    Notif.prepare();
+    Notif.prepare(); // Initialize notifications for future use
 });
