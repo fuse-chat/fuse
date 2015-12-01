@@ -25,7 +25,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
 const publicDirPath = __dirname + '/public';
-
+const cronjobs = require('./cronjobs');
 const userNotificationsManager = require('./user-notifications-manager.js');
 
 // view engine setup - currently uses Handlebars
@@ -219,6 +219,8 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 var port = process.env.PORT || 3000;
+
+cronjobs();
 
 // start the server
 http.listen(port, function(){
