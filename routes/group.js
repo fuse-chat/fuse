@@ -13,38 +13,46 @@ router.get('/:name', function(req, res) {
     var user = passportHelpers.currentUser(req);
 
     if (user != null) { // signed-in
-        var groupName = req.params.name;
-        database.getGroupByName(groupName, function(err, group) {
-            if(err) { throw err; }
-            
-            // If item does not exist, throw a 404
-            // TODO: Make this send the error page
-            if(!group) {
-                res.status(404).send("404 Not found");
-                return false;
+        database.getUserById(user.id, function(err, user) { // doing this so that we do not get the stale object from the session
+            if (err) {
+                res.status(500).send('Internal server error');
             }
 
-            var id = group.id;
-            database.getAllGroups(function(err, groups) {
+            var groupName = req.params.name;
+            database.getGroupByName(groupName, function(err, group) {
                 if(err) { throw err; }
+                
+                // If item does not exist, throw a 404
+                // TODO: Make this send the error page
+                if(!group) {
+                    res.status(404).send("404 Not found");
+                    return false;
+                }
 
-                // INFO:nishanths: I did this stupid thing to make it easier to loop over and pick the selected group in .hbs
-                // even sadder: this seems to be most straightforward way to do it
-                groups.some(function(item) {
-                    if (item.id === id) {
-                        item.selected = true;
-                        return true;
+                var id = group.id;
+                database.getAllGroups(function(err, groups) {
+                    if (err) { 
+                        res.status(500).send('Internal server error');
                     }
-                });
 
-                res.render('index', { 
-                    title: 'Fuse Chat', 
-                    groups: groups, 
-                    selectedGroup: group, 
-                    username: user.name,
-                    user: user,
-                    bellNotifications: user.bellNotifications.slice().reverse(),
-                    preferences: user.preferences
+                    // INFO:nishanths: I did this stupid thing to make it easier to loop over and pick the selected group in .hbs
+                    // even sadder: this seems to be most straightforward way to do it
+                    groups.some(function(item) {
+                        if (item.id === id) {
+                            item.selected = true;
+                            return true;
+                        }
+                    });
+
+                    res.render('index', { 
+                        title: 'Fuse Chat', 
+                        groups: groups, 
+                        selectedGroup: group, 
+                        username: user.name,
+                        user: user,
+                        bellNotifications: user.bellNotifications.slice().reverse(),
+                        preferences: user.preferences
+                    });
                 });
             });
         });

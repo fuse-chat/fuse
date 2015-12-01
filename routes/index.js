@@ -18,24 +18,32 @@ router.get('/', function(req, res, next) {
     if (user != null) { // signed-in
         console.log('main route: signed in', req.session.passport.user);
 
-        database.getAllGroups(function(err, groups) {
+        database.getUserById(user.id, function(err, user) { // doing this so that we do not get the stale object from the session
             if (err) {
-                throw err;
+                res.status(500).send('Internal server error');
             }
 
-            // set the first one to be the selected one if it exists
-            if (groups[0]) {
-                groups[0].selected = true;
-            }
+            // the user object is now a different reference!
 
-            res.render('index', {
-                title: 'Fuse Chat', 
-                groups: groups, 
-                selectedGroup: groups[0],
-                username: user.name,
-                user: user,
-                bellNotifications: user.bellNotifications.slice().reverse(),
-                preferences: user.preferences
+            database.getAllGroups(function(err, groups) {
+                if (err) {
+                    res.status(500).send('Internal server error');
+                }
+
+                // set the first one to be the selected one if it exists
+                if (groups[0]) {
+                    groups[0].selected = true;
+                }
+
+                res.render('index', {
+                    title: 'Fuse Chat', 
+                    groups: groups, 
+                    selectedGroup: groups[0],
+                    username: user.name,
+                    user: user,
+                    bellNotifications: user.bellNotifications.slice().reverse(),
+                    preferences: user.preferences
+                });
             });
         });
     } 
