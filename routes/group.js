@@ -20,7 +20,7 @@ router.get('/:name', function(req, res) {
 
             var groupName = req.params.name;
             database.getGroupByName(groupName, function(err, group) {
-                if(err) { throw err; }
+                if(err) { res.status(500).send('Internal server error'); }
                 
                 // If item does not exist, throw a 404
                 // TODO: Make this send the error page
