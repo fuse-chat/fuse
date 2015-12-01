@@ -80,6 +80,10 @@ exports.localAuth=function(username, password){
 
 // Extract the current user from a req object
 exports.currentUser = function(req) {
+    if (req == null) {
+        throw new Error('missing argument req');
+    }
+    
     return req.session.passport && req.session.passport.user;
 };
 

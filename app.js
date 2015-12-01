@@ -15,7 +15,7 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
-// const GoogleStrategy = require('passport-google');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const FacebookStrategy = require('passport-facebook');
 
 const passortHelpers = require('./helpers/passport-functions.js'); // contains our helper functions for our Passport and database work
@@ -41,16 +41,17 @@ var hbs = exphbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
-// socket.io events
+//===============SOCKET RELATED=================
+//
 
 // TODO: rename to a more specific name that pertains to its purpose (for ex: chat-hub)
 sockets(io);
-
 // handle socket chat events for notifications
 userNotificationsManager(io);
 
-// middleware
+//===============MIDDLEWARE=================
 // see: http://expressjs.com/guide/using-middleware.html
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,13 +88,13 @@ app.use(function(req, res, next){
   next();
 });
 
-
 app.use(lessMiddleware(path.join(publicDirPath)));
 app.use(express.static(path.join(publicDirPath)));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 //===============PASSPORT=================
 // Passport session setup.
+
 passport.serializeUser(function(user, done) {
   // console.log("passport: serializing ", user);
   done(null, user);
@@ -103,8 +104,6 @@ passport.deserializeUser(function(obj, done) {
   // console.log("passport: deserializing ", obj);
   done(null, obj);
 });
-
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 passport.use(new GoogleStrategy({
     'clientID'      : '403805483120-n9nfegk2jgdget7r6svcmahas1fqkjtr.apps.googleusercontent.com',
@@ -169,11 +168,17 @@ passport.use('local-signup', new LocalStrategy(
   }
 ));
 
-// main routes
+//===============ROUTES=================
+//
+
+app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/index'));
 app.use('/group', require('./routes/group'));
 app.use('/api/1/groups', require('./routes/api/1/groups'));
 app.use('/api/1/preferences', require('./routes/api/1/preferences'));
+
+//===============ERROR HANDLER=================
+// 
 
 // if none of routes above match
 // catch 404 and forward to error handler
@@ -206,6 +211,9 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+//===============EXPORTS + SERVER + MISC.=================
+// 
 
 // export app in case other files want to use it
 module.exports = app;
