@@ -29,6 +29,8 @@ Group.init = function(name, description, position) {
     this.groupCreator = null; // TODO: once we have login and user identification support
     this.position = position;
 
+    this.timestamp = Date.now();
+
     this.id = shortid.generate();
 
     return this;
