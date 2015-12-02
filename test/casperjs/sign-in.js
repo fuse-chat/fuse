@@ -1,4 +1,4 @@
-var base_url = '' || 'http://localhost:3000';
+var base_url = 'http://159.203.96.164' || 'http://localhost:3000';
 
 casper.test.begin("Find sign-in buttons", 1, function(test) {
   casper.start(base_url + '/signin', function() {
