@@ -33,7 +33,7 @@ $ nvm alias default 4.2.1
 
 * Install bower (`npm install -g bower`) for getting front-end components easily
 * Install nodemon (`npm install -g nodemon`) for reloading node apps automatically on changes
-* Install the Less CSS compiler (`npm install -g lessc`) for compiling `.less` to `.css` manually, if needed sometimes.
+* Install the Less CSS compiler (`npm install -g less`) for compiling `.less` to `.css` manually, if needed sometimes.
 
 # Repo
 
