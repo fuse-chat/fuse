@@ -76,9 +76,9 @@
             {{#each groups}}
                 <a class="fc-group-list-item-link" href="javascript:G.setGroupAsSelected('{{this.name}}')">
                     {{#if this.selected}}
-                    <li class="fc-group-list-item" data-name="{{this.name}}" data-id="{{this.id}}" data-selected="true" data-number>
+                    <li class="fc-group-list-item" data-position='{{{json this.position}}}' data-name="{{this.name}}" data-id="{{this.id}}" data-selected="true" data-number>
                     {{else }}
-                    <li class="fc-group-list-item" data-name="{{this.name}}" data-id="{{this.id}}" data-number>
+                    <li class="fc-group-list-item" data-position='{{{json this.position}}}' data-name="{{this.name}}" data-id="{{this.id}}" data-number>
                     {{/if}}
                         <div class="fc-group-list-item-name">{{this.name}}</div>
                         <div class="fc-group-list-item-number"></div>

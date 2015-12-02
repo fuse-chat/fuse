@@ -1,7 +1,8 @@
 // Adds methods to the Position object.
 // For a description of this object see https://developer.mozilla.org/en-US/docs/Web/API/Position
-var PositionFunctions = {};
+var max_distance_miles = 0.1;
 
+var PositionFunctions = {};
 /**
  * Helper function. Converts inputted degrees to radians.
  */
@@ -54,7 +55,9 @@ PositionFunctions.distanceInMilesBetween = function(position1, position2) {
  * @return {Boolean}
  */
 PositionFunctions.isWithinMaxDist = function(position1, position2) {
-
+  if(position1 && position2) {
+    return this.distanceInMilesBetween(position1, position2) < max_distance_miles;
+  } else { return true; }
 };
 
 if (typeof module !== 'undefined') {
