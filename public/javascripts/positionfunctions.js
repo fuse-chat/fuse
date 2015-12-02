@@ -60,8 +60,6 @@ PositionFunctions.isWithinMaxDist = function(position1, position2) {
   } else { return true; }
 };
 
-};
-
 if (typeof module !== 'undefined') {
   module.exports = PositionFunctions;
 }

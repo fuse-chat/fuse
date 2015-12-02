@@ -59,8 +59,6 @@ G.setGroupAsSelected = function(name) {
   });
 };
 
-};
-
 /**
  * Creates and returns a DOM node for a list item that
  * can be added to the groups list on the sidebar.
