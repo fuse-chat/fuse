@@ -4,10 +4,10 @@ Geolocation + group based chat
 
 # Table of Contents
 
-* Setup
-  * Environment
-  * Repo
-  * Database
+* Environment
+* Repo
+* Database
+  * Using mongo from the command line
 * Testing
   * Overview
   * Selenium
@@ -18,7 +18,7 @@ Geolocation + group based chat
 
 This sections describes initial developer setup and useful tips.
 
-## Environment
+# Environment
 
 * Install node (and npm) using [`nvm`](https://github.com/creationix/nvm)
 * Setup your computer to use node v4.2.1 or higher
@@ -33,16 +33,16 @@ $ nvm alias default 4.2.1
 * Install nodemon (`npm install -g nodemon`) for reloading node apps automatically on changes
 * Install the Less CSS compiler (`npm install -g lessc`) for compiling `.less` to `.css` manually, if needed sometimes.
 
-## Repo
+# Repo
 
 * Clone the repo `git clone git@github.com:fuse-chat/fuse.git` 
 
-## Database
+# Database
 
 * Install MongoDB (`sudo apt-get install mongodb` for ubuntu or [this](https://docs.mongodb.org/manual/installation/) otherwise) for database management
 * Run `mongod --dbpath=<path of your choice>` to start the mongodb db server.
 
-### Using mongo from the command line
+## Using mongo from the command line
 
 The database URL path we use is `localhost:27017/fuse`
 
@@ -50,7 +50,7 @@ The database URL path we use is `localhost:27017/fuse`
 * You will enter the mongo console, and the prompt will turn into `>`
 * Use the fuse database by typing at the prompt: `use fuse`
 
-#### Basics
+### Basics
 
 Two of our collections are `groups` and `user`. You can work on them like so:
 
@@ -72,11 +72,11 @@ To run selenium tests:
 
 1. Make sure you have the dependencies (`npm install`)
 2. [Download the latest ChromeDriver](http://chromedriver.storage.googleapis.com/index.html) for your platform and add it to your `PATH`.
-3. One of the registered users in your database should be username: hello@gmail.com  password: this for tests to pass
-4. Run selenium files simply using `node`. For example: 
+3. One of the registered users in your database should be `username: hello@gmail.com`, `password: this` for tests to pass
+4. Run selenium files simply using `node`. For example, from the root of the project, run: 
 
 ````bash
-$ node test/selenium/app-interaction.js
+$ node ./selenium/app-interaction.js
 ````
 
 # Running the app locally
