@@ -30,7 +30,6 @@ expect(err).to.eql(false);
 // Once we are in the app
 // Signing out shoud work
 
-/** sidebar */
 browser.findElement(webdriver.By.css('#bs-example-navbar-collapse-2 > ul:nth-child(1) > li:nth-child(2)')).click();
 browser.sleep(200);
 browser.wait(webdriver.until.titleIs('Sign in to Fuse Chat'), 2000);
