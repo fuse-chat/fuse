@@ -2,6 +2,8 @@
 
 Geolocation + group based chat
 
+[![Build Status](https://travis-ci.org/fuse-chat/fuse.svg?branch=master)](https://travis-ci.org/fuse-chat/fuse)
+
 # Table of Contents
 
 * Environment
