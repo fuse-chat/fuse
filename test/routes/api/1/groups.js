@@ -12,8 +12,9 @@ var base_pathname = "/api/1/groups/";
 describe("Group API Unit Tests",function(){
   var groupCreated = false;
   var nonexistentName = "THISNameSUCK$HopefullyItIs Not~ Taken2!!";
+  
   before(function(done) {
-    var item = null ;
+    var item = null;
     do {
       item = groupsdb.findOne({name: nonexistentName}).name;
       if(item) {nonexistentName = nonexistentName + "1";}
