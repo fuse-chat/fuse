@@ -115,8 +115,39 @@ passport.use(new GoogleStrategy({
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
+        //do the work and we will be fine
+      console.log(profile);
+      //check if user exits 
+      userdb.findOne({name: profile.displayName}, function(err, item){
+        if(err) {
+            throw err;
+        }
+        
+        if (item) {
+            console.log("passport: found with username:", profile.displayName);
+            var hash = item.password;
+            password = 1;
+            // check password match
+            if (bcrypt.compareSync(password, hash)) {
+                console.log('im hererererere');
+                deferred.resolve(item);
+            } else {
+                console.log("am i here");
+              deferred.resolve(false);
+            }
+        }
+        if(!item) {
+            console.log ("passport: Could not find user in db for signin:", username);
+            deferred.resolve(false);
+            //create
 
-    
+
+
+        }
+    });
+
+
+
       return done(null, profile);
     });
   }

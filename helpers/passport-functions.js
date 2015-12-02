@@ -108,9 +108,17 @@ exports.facebookAuth=function(username, password){
             }
         }
         if(!item) {
-            console.log ("passport: Could not find user in db for signin:", username);
-            deferred.resolve(false);
-            //create
+            var user = Object.create(User).init(username, hash);
+            userdb.insert(user, function(err, result) {
+                if (err) {
+                    console.log("passport: throwing error");
+                    throw err;
+                }
+
+                if (result) {
+                    deferred.resolve(user);
+                }
+            });
 
 
 
