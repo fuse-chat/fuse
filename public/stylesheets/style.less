@@ -78,6 +78,20 @@ a, a:visited, a:hover, a:focus, a:active {
             font-size: 1rem;
             color: whitesmoke;
             outline: none;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .fc-group-list-item-number {
+            display: inline;
+            background: rgba(198,91,92,1);
+            position: absolute;
+            right: 0;
+            top: 4px;
+            margin-right: 0.5rem;
+            padding: 2px 4px;
+            border-radius: 20%;
         }
     }
 }
@@ -133,6 +147,7 @@ a, a:visited, a:hover, a:focus, a:active {
     padding: 0.5rem;
     color: white;
     border-bottom: 1px solid white;
+    background-color: darken(@brand-primary, 30%);
 }
 
 .bell-notifications li:last-child {

@@ -48,15 +48,17 @@
                 <li class="dropdown"><a href="#" data-toggle="dropdown">
                     <i class="fa fa-bell"></i>
                     Notifications
-                    {{#if bellNotifications}}
                         <div class="bell-notifications-wrapper dropdown-menu">
                             <ul class="bell-notifications">
+                            {{#if bellNotifications}}
                                 {{#each bellNotifications}}
                                 <a href="/group/{{this.groupName}}"><li>{{this.text}}</li></a>
                                 {{/each}}
+                            {{else}}
+                                <a href=""><li>No notifications. All caught up!</li></a>
+                            {{/if}}
                             </ul>
                         </div>
-                    {{/if}}
                 </a></li>
                 <li><a href="" data-toggle="modal" data-target=".modal#fc-preferences" data-keyboard="true">
                     <i class="fa fa-cog"></i>
@@ -81,7 +83,7 @@
                     <li class="fc-group-list-item" data-position='{{{json this.position}}}' data-name="{{this.name}}" data-id="{{this.id}}" data-number>
                     {{/if}}
                         <div class="fc-group-list-item-name">{{this.name}}</div>
-                        <div class="fc-group-list-item-number"></div>
+                        <div class="fc-group-list-item-number">{{this.messages.length}}</div>
                     </li>
                 </a>
             {{/each}}

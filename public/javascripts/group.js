@@ -96,8 +96,8 @@ G.makeGroupListItem = function(data) {
     }
     wrapperLink.href = 'javascript:G.setGroupAsSelected("' + name + '")';
     nameDiv.textContent = name;
-
-    // TODO numberDiv, maybe an unread messages count
+    numberDiv.textContent = messageCount;
+    
     return wrapperLink;
 };
 
