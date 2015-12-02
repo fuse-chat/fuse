@@ -135,6 +135,10 @@ Database.getUserById = function(userId, callback) {
   this.userdb.findOne({id: userId}, callback);
 };
 
+Database.findOneUserByName = function(name, callback) {
+  this.userdb.findOne({name: name}, callback);
+};
+
 /**
  * Set the preferences for the user id
  * @param {Preferences} preferences

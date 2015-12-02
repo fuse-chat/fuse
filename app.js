@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const lessMiddleware = require('less-middleware');
 const exphbs = require('express-handlebars');
 const defines = require('./defines');
+const bcrypt = require('bcryptjs');
 
 // adding for passport use
 const methodOverride = require('method-override');
@@ -17,6 +18,7 @@ const LocalStrategy = require('passport-local');
 const TwitterStrategy = require('passport-twitter');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const FacebookStrategy = require('passport-facebook');
+const User = require('./models/user.js');
 
 const passortHelpers = require('./helpers/passport-functions.js'); // contains our helper functions for our Passport and database work
 
@@ -26,6 +28,13 @@ const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
 const publicDirPath = __dirname + '/public';
 const app_root_path = require('app-root-path').path;
+
+// database requires
+const mongo = require('mongoskin');
+const Database = require('./database.js');
+const database = Object.create(Database).init();
+const db = mongo.db('mongodb://localhost:27017/fuse');
+const userdb = db.collection('user');
 
 const cronjobs = require('./cronjobs');
 const userNotificationsManager = require('./user-notifications-manager.js');
@@ -113,50 +122,27 @@ passport.use(new GoogleStrategy({
     'callbackURL'   : 'http://localhost:3000/auth/google/callback'
   },
   function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-        //do the work and we will be fine
-      console.log(profile);
-      //check if user exits 
-      userdb.findOne({name: profile.displayName}, function(err, item){
-        if(err) {
+      // asynchronous verification, for effect...
+      process.nextTick(function () {
+        var user = Object.create(User).init(profile.emails[0].value);
+        user.photoUrl = profile.photos[0].value;
+
+        userdb.insert(user, function(err, result) {
+          if (err) {
+            console.log('error: google: login');
             throw err;
-        }
-        
-        if (item) {
-            console.log("passport: found with username:", profile.displayName);
-            var hash = item.password;
-            password = 1;
-            // check password match
-            if (bcrypt.compareSync(password, hash)) {
-                console.log('im hererererere');
-                deferred.resolve(item);
-            } else {
-                console.log("am i here");
-              deferred.resolve(false);
-            }
-        }
-        if(!item) {
-            console.log ("passport: Could not find user in db for signin:", username);
-            deferred.resolve(false);
-            //create
+          }
 
-
-
-        }
-    });
-
-
-
-      return done(null, profile);
-    });
-  }
+          return done(null, user);
+        });
+      });
+    }
 ));
+
 // Use the LocalStrategy within Passport to login/”signin” users.
 passport.use('local-signin', new LocalStrategy(
   {passReqToCallback : true}, // allows us to pass back the request to the callback
   function(req, username, password, done) {
-    console.log(req);
     passortHelpers.localAuth(username, password)
     .then(function (user) {
       if (user) {
