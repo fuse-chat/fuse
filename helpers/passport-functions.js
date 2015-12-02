@@ -47,12 +47,10 @@ exports.localReg = function (username, password) {
     
     return deferred.promise;
 };
-
-// TODO: Local Authorizing
-// INFO: Is this still a TODO?
+// TODO: check all users with specific username
 exports.localAuth=function(username, password){
     var deferred = Q.defer();
-
+    //need to check all users, not just one
     userdb.findOne({name: username}, function(err, item){
         if(err){
             throw err;
@@ -71,12 +69,58 @@ exports.localAuth=function(username, password){
         }
         if(!item) {
             console.log ("passport: Could not find user in db for signin");
-            deferred.resolve(false);
+              var user = Object.create(User).init(username, hash);
+          userdb.insert(user, function(err, result) {
+                if (err) {
+                    console.log("passport: throwing error");
+                    throw err;
+                }
+
+                if (result) {
+                    deferred.resolve(user);
+                }
+            });
         }
     });
 
     return deferred.promise;
 };
+exports.facebookAuth=function(username, password){
+    var deferred = Q.defer();
+    //need to check all users, not just one
+    console.log(username);
+    userdb.findOne({name: username}, function(err, item){
+        if(err){
+            throw err;
+        }
+        
+        if (item){
+            console.log("passport: FOUND USER");
+            var hash = item.password;
+            
+            // check password match
+            if (bcrypt.compareSync(password, hash)) {
+                console.log('im hererererere');
+                deferred.resolve(item);
+            } else {
+                console.log("am i here");
+              deferred.resolve(false);
+            }
+        }
+        if(!item) {
+            console.log ("passport: Could not find user in db for signin");
+            deferred.resolve(false);
+            //create
+
+
+
+        }
+    });
+
+    return deferred.promise;
+};
+
+
 
 // Extract the current user from a req object
 exports.currentUser = function(req) {

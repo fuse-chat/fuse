@@ -25,6 +25,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const sockets = require('./sockets.js');
 const publicDirPath = __dirname + '/public';
+const app_root_path = require('app-root-path').path;
 
 const userNotificationsManager = require('./user-notifications-manager.js');
 
@@ -105,11 +106,8 @@ passport.use(new GoogleStrategy({
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
-      
-      // To keep the example simple, the user's Google profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Google account with a user record in your database,
-      // and return that user instead.
+
+    
       return done(null, profile);
     });
   }
@@ -118,6 +116,7 @@ passport.use(new GoogleStrategy({
 passport.use('local-signin', new LocalStrategy(
   {passReqToCallback : true}, // allows us to pass back the request to the callback
   function(req, username, password, done) {
+    console.log(req);
     passortHelpers.localAuth(username, password)
     .then(function (user) {
       if (user) {
@@ -142,6 +141,28 @@ passport.use('local-signup', new LocalStrategy(
   {passReqToCallback : true}, // allows us to pass back the request to the callback
   function(req, username, password, done) {
     passortHelpers.localReg(username, password)
+    .then(function (user) {
+      if (user) {
+        console.log("passport: registered: ", user);
+        req.session.success = 'You are successfully registered and logged in ' + user.name + '!';
+        done(null, user);
+      }
+      if (!user) {
+        console.log("passport: could not register the username: ", username);
+        req.session.error = 'That username is already in use, please try a different one.'; // inform user could not log them in
+        done(null, user);
+      }
+    })
+    .fail(function (err){
+      console.log(err.body);
+    });
+  }
+));
+
+passport.use('facebook-signin', new LocalStrategy(
+  {passReqToCallback : true}, // allows us to pass back the request to the callback
+  function(req, username, password, done) {
+    passortHelpers.facebookAuth(username, password)
     .then(function (user) {
       if (user) {
         console.log("passport: registered: ", user);
