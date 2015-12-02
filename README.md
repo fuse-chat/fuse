@@ -72,10 +72,11 @@ To run selenium tests:
 
 1. Make sure you have the dependencies (`npm install`)
 2. [Download the latest ChromeDriver](http://chromedriver.storage.googleapis.com/index.html) for your platform and add it to your `PATH`.
-3. Run selenium files simply using `node`. For example: 
+3. One of the registered users in your database should be username: hello@gmail.com  password: this for tests to pass
+4. Run selenium files simply using `node`. For example: 
 
 ````bash
-node test/selenium/app-interaction.js
+$ node test/selenium/app-interaction.js
 ````
 
 # Running the app locally
