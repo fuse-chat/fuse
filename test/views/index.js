@@ -1,5 +1,6 @@
 var supertest = require("supertest");
 var should = require("should");
+const app_root_path = require('app-root-path').path;
 
 // This agent refers to PORT where program is runninng.
 
@@ -7,8 +8,7 @@ var server = supertest.agent("http://localhost:3000");
 
 // UNIT test begin
 
-describe("SAMPLE unit test",function(){
-
+describe("Views tests",function(){
   // #1 should return home page
 
   it("should return home page",function(done){
@@ -16,8 +16,6 @@ describe("SAMPLE unit test",function(){
     // calling home page api
     server
     .get("/")
-    .expect("Content-type",/html/)
-    .expect(200, done) // THis is HTTP response
+    .expect(302, done) // THis is HTTP response
   });
-
 });

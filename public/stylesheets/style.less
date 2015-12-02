@@ -181,8 +181,12 @@ a.fc-group-list-item-link {
     margin-bottom: 0.5rem;
     padding: 0.5rem 1.5rem;
 
-    &[data-selected="true"], &:hover {
+    &[data-selected="true"] {
         background-color: @brand-primary;
+    }
+
+    &:hover {
+        background-color: desaturate(@brand-primary, 50%);
     }
 }
 

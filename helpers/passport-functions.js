@@ -50,14 +50,14 @@ exports.localReg = function (username, password) {
 
 exports.localAuth=function(username, password){
     var deferred = Q.defer();
-    //need to check all users, not just one
+
     userdb.findOne({name: username}, function(err, item){
-        if(err){
+        if(err) {
             throw err;
         }
         
-        if (item){
-            console.log("passport: FOUND USER");
+        if (item) {
+            console.log("passport: found user with username:", username);
             var hash = item.password;
             
             // check password match
@@ -68,18 +68,8 @@ exports.localAuth=function(username, password){
             }
         }
         if(!item) {
-            console.log ("passport: Could not find user in db for signin");
-              var user = Object.create(User).init(username, hash);
-          userdb.insert(user, function(err, result) {
-                if (err) {
-                    console.log("passport: throwing error");
-                    throw err;
-                }
-
-                if (result) {
-                    deferred.resolve(user);
-                }
-            });
+            console.log ("passport: Could not find user in db for signin:", username);
+            deferred.resolve(false);
         }
     });
 
@@ -127,8 +117,6 @@ exports.googleAuth= function(username, password){
 
     return deferred.promise;
 };
-
-
 
 
 exports.facebookAuth=function(username, password){

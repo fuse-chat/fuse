@@ -122,15 +122,17 @@ G.makeGroupList = function(data) {
  */
 G.updateSidebar = function(groups) {
     var selectedGroup = G.queryGroupSelected();
+    
     // if selected group is not in the new list of groups, set a new group
     // as selected
     var selectedGroupInArray = groups.some(function(group) {
-      if(group.name == selectedGroup.dataset.name) {
+      if(selectedGroup != null && group.name == selectedGroup.dataset.name) {
         group.selected = true;
         return true;
       }
       return false;
     });
+
     if(!selectedGroupInArray) {
       alert("We're sorry, the group you were viewing is no longer available :(");
       if(groups.length > 0) {
@@ -216,6 +218,7 @@ createGroupButton.addEventListener('click', function(e) {
 
 // handle newly created group events from the server
 defines.socket.on(defines['socket-group-created'], function(data) {
+  console.log('data group', data);
   Geo.groupWithinDistance(data, function(isWithinDistance) {
     if(isWithinDistance) {
       G.addToSidebar(data);

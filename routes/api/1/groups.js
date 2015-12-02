@@ -50,6 +50,7 @@ router.post('/', function(req, res) {
     if(err) { throw err; }
     if(result) {
       req.io.sockets.emit(defines['socket-group-created'], result);
+      console.log('server: group: created:', result);
       res.json(result);
     }
   });
