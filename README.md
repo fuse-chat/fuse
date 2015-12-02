@@ -9,7 +9,9 @@ Geolocation + group based chat
   * Repo
   * Database
 * Testing
-* Running locally
+  * Overview
+  * Selenium
+* Running the app locally
 * Contributors
 
 # Setup
@@ -59,10 +61,24 @@ More details at the reference: [https://docs.mongodb.org/manual/reference/](http
 
 # Testing
 
+## Overview
+
 * All tests can be found in the `test/` folder.
 * To run the tests, ensure that you have installed everything (npm install), then run `./node_modules/mocha/bin/mocha --recursive` from the main folder.
 
-# Running locally
+## Selenium
+
+To run selenium tests:
+
+1. Make sure you have the dependencies (`npm install`)
+2. [Download the latest ChromeDriver](http://chromedriver.storage.googleapis.com/index.html) for your platform and add it to your `PATH`.
+3. Run selenium files simply using `node`. For example: 
+
+````bash
+node test/selenium/app-interaction.js
+````
+
+# Running the app locally
 
 * `git pull --rebase origin master` to get the latest
 * Run `npm install` and `bower install` to install dependencies (please do this regularly)
