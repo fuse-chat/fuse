@@ -42,8 +42,8 @@ a, a:visited, a:hover, a:focus, a:active {
 // Group info jumbotron
 
 .fc-chat-view {
+    width: 100% - @fc-left-sidebar-width;
     position: relative;
-    left: @fc-left-sidebar-width;
 
     .group-info {
         padding: 2rem;
@@ -59,8 +59,7 @@ a, a:visited, a:hover, a:focus, a:active {
 // Has lists and headings for lists
 
 .fc-sidebar {
-    position: fixed;
-    top: @navbar-height;
+    position: relative;
     width: @fc-left-sidebar-width;
     background-color: @gray-dark;
     color: @text-white;
@@ -185,10 +184,6 @@ a.fc-group-list-item-link {
     &[data-selected="true"], &:hover {
         background-color: @brand-primary;
     }
-}
-
-.fc-chat-view {
-    width: 100% - @fc-left-sidebar-width;
 }
 
 // ======================================================
