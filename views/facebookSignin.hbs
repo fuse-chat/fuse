@@ -6,7 +6,7 @@
 <body>
 <script>
 	var badName = "hello bad name";
-  var uid = "hi"
+  var uid = "hi";
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -50,6 +50,7 @@
     version    : 'v2.2' // use version 2.2
   });
 
+
   // Now that we've initialized the JavaScript SDK, we call 
   // FB.getLoginStatus().  This function gets the state of the
   // person visiting this page and can return one of three states to
@@ -83,11 +84,20 @@
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
-      //console.log(respnse.email);
+      console.log(response);
+      email = response.email;
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
-        window.location.href = '/postSignIn?id=' + response.name + '&pass=' + uid;
+          // if facebook stores the email, store by email. else store by username
+          if (response.email!= null){
+                window.location.href = '/postSignIn?id=' + response.email + '&pass=' + uid;
+          }
 
+          else{
+
+        //console.log('read this right here' + response.email);
+        window.location.href = '/postSignIn?id=' + response.name + '&pass=' + uid;
+      }
 
     });
   }

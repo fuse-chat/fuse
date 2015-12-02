@@ -126,7 +126,7 @@ passport.use(new GoogleStrategy({
     process.nextTick(function () {
           
 
-    passortHelpers.googleAuth(profile.displayName, profile.id)
+    passortHelpers.googleAuth(profile.emails[0].value, profile.id,profile.photos[0].value)
     .then(function (user) {
       if (user) {
         console.log("passport: logged in as: ", user);

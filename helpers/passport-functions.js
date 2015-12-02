@@ -75,7 +75,7 @@ exports.localAuth=function(username, password){
 
     return deferred.promise;
 };
-exports.googleAuth= function(username, password){
+exports.googleAuth= function(username, password, pic){
     var deferred = Q.defer();
     //need to check all users, not just one
     userdb.findOne({name: username}, function(err, item){
@@ -99,6 +99,7 @@ exports.googleAuth= function(username, password){
         if(!item) {
             var hash = bcrypt.hashSync(password, 8);
             var user = Object.create(User).init(username, hash);
+            user.photoUrl= pic;
             userdb.insert(user, function(err, result) {
                 if (err) {
                     console.log("passport: throwing error");
