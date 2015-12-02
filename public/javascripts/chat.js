@@ -4,12 +4,6 @@
 // - notify to the server the messages sent by the client
 // - manage ui
 
-
-var form = document.querySelector('form#fc-message-form');
-var messageInput = document.querySelector('#fc-m');
-var messages = document.querySelector('#fc-messages');
-console.log(form, messages, messageInput)
-
 const Chat = {};
 
 Chat.makeMessageNode = function(obj) {
@@ -29,28 +23,35 @@ Chat.makeMessageNode = function(obj) {
     return parent;
 };
 
-form.addEventListener('submit', function(e) {
-    var node = G.queryGroupSelected();
-	if (node == null) return toolbelt.event.stop(e);
+window.addEventListener('load', function(e) {
+    var form = document.querySelector('form#fc-message-form');
 
-	var groupId = node.dataset.id;
-    var senderId = document.querySelector('body').dataset['userid'];
+    form.addEventListener('submit', function(e) {
+        var messageInput = document.querySelector('#fc-m');
 
-    if (messageInput.value.trim().length === 0) {
+        var node = G.queryGroupSelected();
+    	if (node == null) return toolbelt.event.stop(e);
+
+    	var groupId = node.dataset.id;
+        var senderId = document.querySelector('body').dataset['userid'];
+
+        if (messageInput.value.trim().length === 0) {
+            return toolbelt.event.stop(e);
+        }
+
+        defines.socket.emit(defines['socket-chat-message'], { 
+            messageBody: messageInput.value,
+            groupId: groupId,
+            senderId: senderId
+        });
+
+        messageInput.value = '';
         return toolbelt.event.stop(e);
-    }
-
-    defines.socket.emit(defines['socket-chat-message'], { 
-        messageBody: messageInput.value,
-        groupId: groupId,
-        senderId: senderId
     });
-
-    messageInput.value = '';
-    return toolbelt.event.stop(e);
 });
 
 defines.socket.on(defines['socket-chat-message'], function(obj) {
+    var messages = document.querySelector('#fc-messages');
     var node = G.queryGroupSelected();
 	if (node == null) return;
 

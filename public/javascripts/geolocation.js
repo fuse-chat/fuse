@@ -6,7 +6,7 @@
 const Geo = {};
 
 Geo.getCurrentPosition = function(callback) {
-  navigator.geolocation.getCurrentPosition(callback);
+  navigator.geolocation.getCurrentPosition(callback, null, {maximumAge: 1000*60*5}); // 2 mins. cache
 };
 
 Geo.groupWithinDistance = function(group, callback) {
