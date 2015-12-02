@@ -113,42 +113,28 @@ passport.use(new GoogleStrategy({
     'callbackURL'   : 'http://localhost:3000/auth/google/callback'
   },
   function(accessToken, refreshToken, profile, done) {
+
     // asynchronous verification, for effect...
     process.nextTick(function () {
-        //do the work and we will be fine
-      console.log(profile);
-      //check if user exits 
-      userdb.findOne({name: profile.displayName}, function(err, item){
-        if(err) {
-            throw err;
-        }
+          
+
+    passortHelpers.googleAuth(profile.displayName, profile.id)
+    .then(function (user) {
+      if (user) {
+        console.log("passport: logged in as: ", user);
+        //req.session.success = 'You are successfully logged in ' + user.name + '!';
+        return done(null, user);
+      }
+      if (!user) {
+        console.log("passport: could not login in with username: ", username);
+        req.session.error = 'Could not log user in. Please try again.'; // inform user could not log them in
+        return done(null, user);
+      }
+    })
+    .fail(function (err) {
+      console.log(err.body);
+    });    
         
-        if (item) {
-            console.log("passport: found with username:", profile.displayName);
-            var hash = item.password;
-            password = 1;
-            // check password match
-            if (bcrypt.compareSync(password, hash)) {
-                console.log('im hererererere');
-                deferred.resolve(item);
-            } else {
-                console.log("am i here");
-              deferred.resolve(false);
-            }
-        }
-        if(!item) {
-            console.log ("passport: Could not find user in db for signin:", username);
-            deferred.resolve(false);
-            //create
-
-
-
-        }
-    });
-
-
-
-      return done(null, profile);
     });
   }
 ));

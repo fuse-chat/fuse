@@ -85,10 +85,9 @@ exports.localAuth=function(username, password){
 
     return deferred.promise;
 };
-exports.facebookAuth=function(username, password){
+exports.googleAuth= function(username, password){
     var deferred = Q.defer();
     //need to check all users, not just one
-    console.log(username);
     userdb.findOne({name: username}, function(err, item){
         if(err) {
             throw err;
@@ -100,14 +99,59 @@ exports.facebookAuth=function(username, password){
             
             // check password match
             if (bcrypt.compareSync(password, hash)) {
-                console.log('im hererererere');
+                console.log("jkjkj");
                 deferred.resolve(item);
             } else {
-                console.log("am i here");
+                console.log("fd");
               deferred.resolve(false);
             }
         }
         if(!item) {
+            var hash = bcrypt.hashSync(password, 8);
+            var user = Object.create(User).init(username, hash);
+            userdb.insert(user, function(err, result) {
+                if (err) {
+                    console.log("passport: throwing error");
+                    throw err;
+                }
+
+                if (result) {
+                    deferred.resolve(user);
+                }
+            });
+
+
+
+        }
+    });
+
+    return deferred.promise;
+};
+
+
+
+
+exports.facebookAuth=function(username, password){
+    var deferred = Q.defer();
+    //need to check all users, not just one
+    userdb.findOne({name: username}, function(err, item){
+        if(err) {
+            throw err;
+        }
+        
+        if (item) {
+            console.log("passport: found user with username:", username);
+            var hash = item.password;
+            
+            // check password match
+            if (bcrypt.compareSync(password, hash)) {
+                deferred.resolve(item);
+            } else {
+              deferred.resolve(false);
+            }
+        }
+        if(!item) {
+            var hash = bcrypt.hashSync(password, 8);
             var user = Object.create(User).init(username, hash);
             userdb.insert(user, function(err, result) {
                 if (err) {
