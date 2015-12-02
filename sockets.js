@@ -23,6 +23,7 @@ module.exports = function(io) {
                 database.addMessageToGroupById(message, obj.groupId);
                 
                 obj.sender = user;
+                obj.message = message;
                 
                 io.emit(defines['socket-chat-message'], obj);
             });

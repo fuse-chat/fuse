@@ -16,17 +16,16 @@ Chat.makeMessageNode = function(obj) {
     var parent = document.createElement('div');
     parent.classList.add('message-wrapper');
 
-    var senderNode = document.createElement('div');
-    var messageNode = document.createElement('div');
-    senderNode.classList.add('sender');
-    messageNode.classList.add('message');
-
-    senderNode.textContent = obj.sender.name;
-    messageNode.textContent = obj.messageBody;
-
-    parent.appendChild(senderNode);
-    parent.appendChild(messageNode);
-
+    parent.innerHTML = `
+    <div class="photo" style="background-image:url(${obj.sender.photoUrl})"></div>
+    <div>
+        <div class="upper-row">
+            <div class="sender">${obj.sender.name}</div>
+            <div class="timestamp">${new Date(obj.message.timestamp).toString()}</div>
+        </div>
+        <div class="message">${obj.messageBody}</div>
+    </div>
+    `
     return parent;
 };
 
@@ -36,6 +35,10 @@ form.addEventListener('submit', function(e) {
 
 	var groupId = node.dataset.id;
     var senderId = document.querySelector('body').dataset['userid'];
+
+    if (messageInput.value.trim().length === 0) {
+        return toolbelt.event.stop(e);
+    }
 
     defines.socket.emit(defines['socket-chat-message'], { 
         messageBody: messageInput.value,

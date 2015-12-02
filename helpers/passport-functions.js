@@ -47,7 +47,7 @@ exports.localReg = function (username, password) {
     
     return deferred.promise;
 };
-// TODO: check all users with specific username
+
 exports.localAuth=function(username, password){
     var deferred = Q.defer();
     //need to check all users, not just one
@@ -90,12 +90,12 @@ exports.facebookAuth=function(username, password){
     //need to check all users, not just one
     console.log(username);
     userdb.findOne({name: username}, function(err, item){
-        if(err){
+        if(err) {
             throw err;
         }
         
-        if (item){
-            console.log("passport: FOUND USER");
+        if (item) {
+            console.log("passport: found user with username:", username);
             var hash = item.password;
             
             // check password match
@@ -108,7 +108,7 @@ exports.facebookAuth=function(username, password){
             }
         }
         if(!item) {
-            console.log ("passport: Could not find user in db for signin");
+            console.log ("passport: Could not find user in db for signin:", username);
             deferred.resolve(false);
             //create
 
@@ -121,9 +121,15 @@ exports.facebookAuth=function(username, password){
 };
 
 
-
-// Extract the current user from a req object
+/**
+ * Extract the current user from a req object
+ * @param {Object} req An express request object
+ */
 exports.currentUser = function(req) {
+    if (req == null) {
+        throw new Error('missing argument req');
+    }
+
     return req.session.passport && req.session.passport.user;
 };
 

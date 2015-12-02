@@ -21,7 +21,6 @@ defines.API_VERSION = '1';
 defines.DEBUG = true;
 defines.socket = io();
 
-document.addEventListener('load', function() {
-    // Initialize notifications for future use
-    Notif.prepare();
+window.addEventListener('load', function() {
+    Notif.prepare(); // Initialize notifications for future use
 });

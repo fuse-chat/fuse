@@ -8,55 +8,60 @@ const passportHelpers = require(app_root_path + '/helpers/passport-functions.js'
 
 const database = Object.create(Database).init();
 
-// TODO: cleanup
-// get the group id, given the name
-// for that item set the `selected` key
-// then send all items so they can be used for the `selected` attribute
+/** Get group by name. Example: /group/gymnasium */
 router.get('/:name', function(req, res) {
-    var groupName = req.params.name;
-    database.getGroupByName(groupName, function(err, group) {
-        if(err) { throw err; }
-        
-        // If item does not exist, throw a 404
-        // TODO: Make this send the error page
-        if(!group) {
-            res.status(404).send("Not found");
-            return false;
-        }
+    var user = passportHelpers.currentUser(req);
 
-        var id = group.id;
-        database.getAllGroups(function(err, groups) {
-            if(err) { throw err; }
-            
-            var selectedGroup = null;
-            groups.some(function(item) {
-                if (item.id === id) {
-                    selectedGroup = item;
-                    item.selected = true;
-                    return true;
-                }
-            });
-
-            var username;      
-            var currentUser = passportHelpers.currentUser(req);
-
-            if (currentUser == null) {
-                res.redirect('/signin');
-                return;
+    if (user != null) { // signed-in
+        database.getUserById(user.id, function(err, user) { // doing this so that we do not get the stale object from the session
+            if (err) {
+                res.status(500).send('Internal server error');
             }
 
-            username = currentUser.name;
+            var groupName = req.params.name;
+            database.getGroupByName(groupName, function(err, group) {
+                if(err) { res.status(500).send('Internal server error'); }
+                
+                // If item does not exist, throw a 404
+                // TODO: Make this send the error page
+                if(!group) {
+                    res.status(404).send("404 Not found");
+                    return false;
+                }
 
-            res.render('index', { 
-                title: 'Fuse Chat', 
-                groups: groups, 
-                selectedGroup: selectedGroup, 
-                username: username,
-                user: currentUser,
-                preferences: currentUser && currentUser.preferences
+                var id = group.id;
+                database.getAllGroups(function(err, groups) {
+                    if (err) { 
+                        res.status(500).send('Internal server error');
+                    }
+
+                    // INFO:nishanths: I did this stupid thing to make it easier to loop over and pick the selected group in .hbs
+                    // even sadder: this seems to be most straightforward way to do it
+                    groups.some(function(item) {
+                        if (item.id === id) {
+                            item.selected = true;
+                            return true;
+                        }
+                    });
+
+                    res.render('index', { 
+                        title: 'Fuse Chat', 
+                        groups: groups, 
+                        selectedGroup: group, 
+                        username: user.name,
+                        user: user,
+                        bellNotifications: user.bellNotifications.slice().reverse(),
+                        preferences: user.preferences
+                    });
+                });
             });
         });
-    });
+    }
+
+    else {
+        res.redirect('/signin');
+    }
+    
 });
 
 module.exports = router;

@@ -20,7 +20,7 @@ G.createOnServer = function(params, opt_fn) {
     var defaultGroupParams = { name: '', description: '', position: null };
     params = toolbelt.normalize(params, defaultGroupParams);
     $.post(defines['groups-url-base'], params, opt_fn || function(res){
-      window.location.href = defines['single-group-url-base'] + '/' + res.name;
+      G.addAndSetGroupAsSelected(res);
     });
 };
 
@@ -29,11 +29,34 @@ G.getAllGroupsOnServer = function(fn) {
 };
 
 /* This function is not used. Could be used in the future. */
+G.addAndSetGroupAsSelected = function(data) {
+  G.addToSidebar(data);
+  G.setGroupAsSelected(data.name);
+};
+
+
+/*
+ * Helper function. Returns the outer html of a jquery object
+ * @param {JQUERY Object} jq_obj
+ * @return {String}
+ */
+getOuterHTML = function(jq_obj) {
+   return jq_obj.clone().wrap('<div>').parent().html();
+};
+
+/*
+ * Sets the inputted group as the selected group.
+ * @param {String} name
+ */
 G.setGroupAsSelected = function(name) {
-  var groupList = document.querySelector('.fc-group-list');
-  window.location.href = defines['single-group-url-base'] + '/' + name;
-  var newGroupList = document.querySelector('.fc-group-list');
-  newGroupList = groupList;
+  $.get(defines['single-group-url-base'] + '/' + name, function(data) {
+    var currentGroupSelected = $('.fc-group-list-item[data-selected="true"]');
+    var currentName = currentGroupSelected.data('name');
+    currentGroupSelected.replaceWith(getOuterHTML($(data).find('[data-name="' + currentName + '"]').first()));
+    $('[data-name="' + name + '"]').replaceWith(getOuterHTML($(data).find('[data-name="' + name + '"]')));
+    $('#fc-messages').html($(data).find('#fc-messages').html());
+    $('.jumbotron.group-info').html($(data).find('.jumbotron.group-info').html());
+  });
 };
 
 /**
@@ -46,6 +69,8 @@ G.makeGroupListItem = function(data) {
     var name = data.name;
     var messageCount = data.messages.length;
     var id = data.id;
+    var position = data.position;
+    var selected = data.selected;
 
     toolbelt.assert(!_.isEmpty(name), 'name should be non-empty string');
     
@@ -65,12 +90,30 @@ G.makeGroupListItem = function(data) {
 
     wrapperLi.dataset.name = name;
     wrapperLi.dataset.id = id;
-    wrapperLink.href = `/group/${name}`;
+    wrapperLi.dataset.position = JSON.stringify(position);
+    if(selected === true) {
+      wrapperLi.dataset.selected = selected;
+    }
+    wrapperLink.href = 'javascript:G.setGroupAsSelected("' + name + '")';
     nameDiv.textContent = name;
 
     // TODO numberDiv, maybe an unread messages count
-
     return wrapperLink;
+};
+
+/**
+ * Creates and returns a DOM node for the fc-group-list
+ * @param  {Array<Object>}  data
+ * @return {HTMLElement}
+ */
+
+G.makeGroupList = function(data) {
+  var wrapperUl = document.createElement('li');
+  wrapperUl.classList.add('fc-group-list');
+  data.forEach(function(group) {
+    wrapperUl.appendChild(G.makeGroupListItem(group));
+  });
+  return wrapperUl;
 };
 
 /*
@@ -78,20 +121,26 @@ G.makeGroupListItem = function(data) {
  * @param  {Array<Group>} groups
  */
 G.updateSidebar = function(groups) {
-    var selectedGroup = this.queryGroupSelected();
+    var selectedGroup = G.queryGroupSelected();
     // if selected group is not in the new list of groups, set a new group
     // as selected
-    if(groups.indexOf(selectedGroup) == -1) {
-      if(groups.length == 0) {
-        selectedGroup = null;
-      } else {
+    var selectedGroupInArray = groups.some(function(group) {
+      if(group.name == selectedGroup.dataset.name) {
+        group.selected = true;
+        return true;
+      }
+      return false;
+    });
+    if(!selectedGroupInArray) {
+      alert("We're sorry, the group you were viewing is no longer available :(");
+      if(groups.length > 0) {
         groups[0].selected = true;
-        selectedGroup = groups[0];
       }
     }
 
     // Now update the new group list.
-
+    var groupList = document.querySelector('.fc-group-list');
+    groupList.innerHTML = G.makeGroupList(groups).innerHTML;
 };
 
 /**
@@ -169,7 +218,6 @@ createGroupButton.addEventListener('click', function(e) {
 defines.socket.on(defines['socket-group-created'], function(data) {
   Geo.groupWithinDistance(data, function(isWithinDistance) {
     if(isWithinDistance) {
-      console.log("Within distance", data);
       G.addToSidebar(data);
     }
   });
@@ -180,3 +228,8 @@ defines.socket.on(defines['socket-group-removed'], function(data) {
     // TODO
     console.log('TODO: group removed', data);
 });
+
+window.addEventListener('load', function() {
+  Geo.updateGroupsOnStartup();
+});
+
