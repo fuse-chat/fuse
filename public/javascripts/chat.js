@@ -59,3 +59,7 @@ defines.socket.on(defines['socket-chat-message'], function(obj) {
 		messages.appendChild(Chat.makeMessageNode(obj));
 	}
 });
+
+if (typeof module !== undefined && typeof module.exports != undefined) {
+    module.exports = Chat;
+}

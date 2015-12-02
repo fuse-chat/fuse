@@ -36,11 +36,13 @@ Geo.updateGroupsOnChange = function(position) {
   if((previousPosition != null) && (previousPosition.coords.longitude == position.coords.longitude) &&
      (previousPosition.coords.latitude == position.coords.latitude)) { return; }
   previousPosition = position;
-  G.getAllGroupsOnServer(function(groups) {
-    Geo.allGroupsWithinDistanceFromPos(groups, position, function(groupsList) {
-      G.updateSidebar(groupsList);
+  if (G) {
+    G.getAllGroupsOnServer(function(groups) {
+      Geo.allGroupsWithinDistanceFromPos(groups, position, function(groupsList) {
+        G.updateSidebar(groupsList);
+      });
     });
-  });
+  }
 };
 
 /*
