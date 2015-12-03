@@ -60,6 +60,15 @@ G.setGroupAsSelected = function(name) {
 };
 
 /**
+ * Get group node by id
+ * @param  {string} id
+ * @return {HTMLElement}
+ */
+G.getGroupById = function(id) {
+  return document.querySelector(`.fc-group-list-item[data-id="${id}"]`);
+};
+
+/**
  * Creates and returns a DOM node for a list item that
  * can be added to the groups list on the sidebar.
  * @param  {Object}   data

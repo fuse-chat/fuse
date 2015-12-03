@@ -51,9 +51,22 @@ window.addEventListener('load', function(e) {
 });
 
 defines.socket.on(defines['socket-chat-message'], function(obj) {
+    debugger;
+    var groupToUpdateNumber = G.getGroupById(obj.groupId);
+    if (groupToUpdateNumber != null) {
+        var numberNode = groupToUpdateNumber.querySelector('.fc-group-list-item-number');
+        numberNode.textContent = parseInt(numberNode.textContent, 10) + 1;
+    }
+
+    // Add message to list of messages in the main chat view
+    // if it's the group in view
+
     var messages = document.querySelector('#fc-messages');
     var node = G.queryGroupSelected();
-	if (node == null) return;
+	
+    if (node == null)  {
+        return;
+    }
 
 	if (node.dataset.id === obj.groupId) {
 		messages.appendChild(Chat.makeMessageNode(obj));
