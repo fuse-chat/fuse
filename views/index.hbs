@@ -104,7 +104,11 @@
                             <div class="sender">{{this.sender.name}}</div>
                             <div class="timestamp">{{toHumanDate this.timestamp}}</div>
                         </div>
+                        {{#if this.isGif}}
+                        <div class="message"><img src="{{this.body}}"></div>
+                        {{else}} 
                         <div class="message">{{this.body}}</div>
+                        {{/if}}
                     </div>
                 </div>
             {{/each}}

@@ -16,13 +16,14 @@ var Message = {};
  * @param  {User} sender
  * @return {Message}
  */
-Message.init = function(body, sender) {
+Message.init = function(body, sender, isGif) {
     helpers.assert(!_.isEmpty(body), 'message body cannot be empty');
 
     this.body = body;
     this.sender = sender;
     this.id = shortid.generate();
     this.timestamp = Date.now();
+    this.isGif = isGif;
 
     return this;
 };
