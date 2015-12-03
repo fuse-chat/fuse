@@ -121,7 +121,7 @@ G.makeGroupList = function(data) {
  * @param  {Array<Group>} groups
  * @param  {Boolean} alertOnGroupChange
  */
-G.updateSidebar = function(groups, alertOnGroupChange = true) {
+G.updateSidebar = function(groups, alertOnGroupChange) {
     var selectedGroup = G.queryGroupSelected();
     var selectedGroupChanged = false;
     

@@ -32,7 +32,7 @@ Geo.allGroupsWithinDistance = function(groups, callback) {
 };
 
 var previousPosition = null;
-Geo.updateGroupsOnChange = function(position, alertOnGroupChange = true) {
+Geo.updateGroupsOnChange = function(position, alertOnGroupChange) {
   if((previousPosition != null) && (previousPosition.coords.longitude == position.coords.longitude) &&
      (previousPosition.coords.latitude == position.coords.latitude)) { return; }
   previousPosition = position;
@@ -56,7 +56,9 @@ Geo.updateGroupsOnStartup = function() {
 }
 
 Geo.start = function() {
-  navigator.geolocation.watchPosition(Geo.updateGroupsOnChange);
+  navigator.geolocation.watchPosition(function(position) {
+    Geo.updateGroupsOnChange(position, true);
+  });
 };
 
 Geo.start();
