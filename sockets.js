@@ -18,8 +18,8 @@ module.exports = function(io) {
                 if (err) {
                     throw err;
                 }
-
-                var message = Object.create(Message).init(obj.messageBody, user);
+                
+                var message = Object.create(Message).init(obj.messageBody, user, obj.isGif);
                 database.addMessageToGroupById(message, obj.groupId);
                 
                 obj.sender = user;

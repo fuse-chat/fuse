@@ -56,7 +56,7 @@ browser.findElement(webdriver.By.css('#fc-create-group > div > div > div.modal-f
 console.log('✔ create groups button works exists');
 
 /** preferences */
-browser.findElement(webdriver.By.css('#bs-example-navbar-collapse-2 > ul.nav.navbar-nav.navbar-right > li:nth-child(2)')).click();
+browser.findElement(webdriver.By.css('#bs-example-navbar-collapse-2 > ul.nav.navbar-nav.navbar-right > li:nth-child(3)')).click();
 browser.sleep(200);
 expect(browser.findElement(webdriver.By.css('#fc-preferences')) != null).to.equal(true);
 browser.findElement(webdriver.By.css('#fc-preferences > div > div > div.modal-footer > button.btn.btn-default.fc-preferences-cancel')).click();

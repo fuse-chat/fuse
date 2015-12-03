@@ -36,8 +36,6 @@ router.get('/', function(req, res, next) {
 
                 res.render('index', {
                     title: 'Fuse Chat', 
-                    groups: groups, 
-                    selectedGroup: groups[0],
                     username: user.name,
                     user: user,
                     bellNotifications: user.bellNotifications.slice().reverse(),

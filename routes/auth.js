@@ -43,7 +43,7 @@ router.post('/login', passport.authenticate('local-signin', {
 router.get('/logout', function (req, res) {
     req.logOut();
     req.session.destroy(function (err) {
-        res.redirect('/'); //Inside a callback… bulletproof!
+        res.redirect('/signin'); //Inside a callback… bulletproof!
     });
 });
 

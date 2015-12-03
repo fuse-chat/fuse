@@ -60,6 +60,15 @@ G.setGroupAsSelected = function(name) {
 };
 
 /**
+ * Get group node by id
+ * @param  {string} id
+ * @return {HTMLElement}
+ */
+G.getGroupById = function(id) {
+  return document.querySelector(`.fc-group-list-item[data-id="${id}"]`);
+};
+
+/**
  * Creates and returns a DOM node for a list item that
  * can be added to the groups list on the sidebar.
  * @param  {Object}   data
@@ -96,8 +105,8 @@ G.makeGroupListItem = function(data) {
     }
     wrapperLink.href = 'javascript:G.setGroupAsSelected("' + name + '")';
     nameDiv.textContent = name;
-
-    // TODO numberDiv, maybe an unread messages count
+    numberDiv.textContent = messageCount;
+    
     return wrapperLink;
 };
 
@@ -119,9 +128,11 @@ G.makeGroupList = function(data) {
 /*
  * Updates the sidebar to contain the new groups
  * @param  {Array<Group>} groups
+ * @param  {Boolean} alertOnGroupChange
  */
-G.updateSidebar = function(groups) {
+G.updateSidebar = function(groups, alertOnGroupChange) {
     var selectedGroup = G.queryGroupSelected();
+    var selectedGroupChanged = false;
     
     // if selected group is not in the new list of groups, set a new group
     // as selected
@@ -134,15 +145,22 @@ G.updateSidebar = function(groups) {
     });
 
     if(!selectedGroupInArray) {
-      alert("We're sorry, the group you were viewing is no longer available :(");
+      if(alertOnGroupChange) {
+        alert("We're sorry, the group you were viewing is no longer available :(");
+      }
       if(groups.length > 0) {
         groups[0].selected = true;
+        selectedGroup = groups[0];
+        selectedGroupChanged = true;
       }
     }
 
     // Now update the new group list.
     var groupList = document.querySelector('.fc-group-list');
     groupList.innerHTML = G.makeGroupList(groups).innerHTML;
+    if(selectedGroupChanged) {
+      G.setGroupAsSelected(selectedGroup.name);
+    }
 };
 
 /**
