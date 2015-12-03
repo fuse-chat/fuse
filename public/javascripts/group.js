@@ -5,6 +5,7 @@
 
 defines['groups-url-base'] = `/api/${defines.API_VERSION}/groups`;
 defines['single-group-url-base'] = `/group`;
+defines['signin-url'] = `/signin`;
 
 /**
  * The group global namespace
@@ -50,6 +51,11 @@ getOuterHTML = function(jq_obj) {
  */
 G.setGroupAsSelected = function(name) {
   $.get(defines['single-group-url-base'] + '/' + name, function(data) {
+    // Redirect if crashes. Crashes detected if grouplist is not there.
+    if($(data).find('.fc-group-list').length == 0) {
+      window.location.pathname = defines['signin-url'];
+      return;
+    }
     var currentGroupSelected = $('.fc-group-list-item[data-selected="true"]');
     var currentName = currentGroupSelected.data('name');
     currentGroupSelected.replaceWith(getOuterHTML($(data).find('[data-name="' + currentName + '"]').first()));
