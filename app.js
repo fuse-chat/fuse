@@ -197,7 +197,8 @@ passport.use('local-signup', new LocalStrategy(
 passport.use('facebook-signin', new LocalStrategy(
   {passReqToCallback : true}, // allows us to pass back the request to the callback
   function(req, username, password, done) {
-    passortHelpers.facebookAuth(username, password)
+    var pic = req.body.pic;
+    passortHelpers.facebookAuth(username, password,pic)
     .then(function (user) {
       if (user) {
         console.log("passport: registered: ", user);

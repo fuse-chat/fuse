@@ -54,8 +54,9 @@ router.get('/auth/facebook', function(req,res){
 router.get('/postSignIn', function(req, res, next) {
     req.body.username = req.query.id;
     req.body.password = req.query.pass;
-    console.log(req.body.username);
-  passport.authenticate('facebook-signin', function(err, user, info) {
+    req.body.pic = req.query.pic;
+    console.log(req.body.pic);
+    passport.authenticate('facebook-signin', function(err, user, info) {
     if (err) { 
         return next(err); }
     if (!user) { 

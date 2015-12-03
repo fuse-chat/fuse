@@ -88,15 +88,16 @@
       email = response.email;
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
+        var im = "http://graph.facebook.com/" + uid + "/picture?type=large";
           // if facebook stores the email, store by email. else store by username
           if (response.email!= null){
-                window.location.href = '/postSignIn?id=' + response.email + '&pass=' + uid;
+                window.location.href = '/postSignIn?id=' + response.email + '&pass=' + uid + '&pic=' + im;
           }
 
           else{
 
         //console.log('read this right here' + response.email);
-        window.location.href = '/postSignIn?id=' + response.name + '&pass=' + uid;
+        window.location.href = '/postSignIn?id=' + response.name + '&pass=' + uid + '&pic=' + im;
       }
 
     });

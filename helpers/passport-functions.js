@@ -120,7 +120,7 @@ exports.googleAuth= function(username, password, pic){
 };
 
 
-exports.facebookAuth=function(username, password){
+exports.facebookAuth=function(username, password,pic){
     var deferred = Q.defer();
     //need to check all users, not just one
     userdb.findOne({name: username}, function(err, item){
@@ -129,7 +129,6 @@ exports.facebookAuth=function(username, password){
         }
         
         if (item) {
-            console.log("passport: found user with username:", username);
             var hash = item.password;
             
             // check password match
@@ -142,6 +141,7 @@ exports.facebookAuth=function(username, password){
         if(!item) {
             var hash = bcrypt.hashSync(password, 8);
             var user = Object.create(User).init(username, hash);
+            user.photoUrl= pic;
             userdb.insert(user, function(err, result) {
                 if (err) {
                     console.log("passport: throwing error");
