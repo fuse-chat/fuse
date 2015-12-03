@@ -52,7 +52,7 @@
                             <ul class="bell-notifications">
                             {{#if bellNotifications}}
                                 {{#each bellNotifications}}
-                                <a href="javascript:G.setGroupAsSelected({{this.groupName}})"><li>{{this.text}}</li></a>
+                                <a href="javascript:G.setGroupAsSelected('{{this.groupName}}')"><li>{{this.text}}</li></a>
                                 {{/each}}
                             {{else}}
                                 <a href=""><li>No notifications. All caught up!</li></a>
