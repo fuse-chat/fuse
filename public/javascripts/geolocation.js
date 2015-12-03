@@ -32,14 +32,14 @@ Geo.allGroupsWithinDistance = function(groups, callback) {
 };
 
 var previousPosition = null;
-Geo.updateGroupsOnChange = function(position) {
+Geo.updateGroupsOnChange = function(position, alertOnGroupChange = true) {
   if((previousPosition != null) && (previousPosition.coords.longitude == position.coords.longitude) &&
      (previousPosition.coords.latitude == position.coords.latitude)) { return; }
   previousPosition = position;
   if (G) {
     G.getAllGroupsOnServer(function(groups) {
       Geo.allGroupsWithinDistanceFromPos(groups, position, function(groupsList) {
-        G.updateSidebar(groupsList);
+        G.updateSidebar(groupsList, alertOnGroupChange);
       });
     });
   }
@@ -51,7 +51,7 @@ Geo.updateGroupsOnChange = function(position) {
  */
 Geo.updateGroupsOnStartup = function() {
   Geo.getCurrentPosition(function(position) {
-    Geo.updateGroupsOnChange(position);
+    Geo.updateGroupsOnChange(position, false);
   });
 }
 

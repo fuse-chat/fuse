@@ -119,9 +119,11 @@ G.makeGroupList = function(data) {
 /*
  * Updates the sidebar to contain the new groups
  * @param  {Array<Group>} groups
+ * @param  {Boolean} alertOnGroupChange
  */
-G.updateSidebar = function(groups) {
+G.updateSidebar = function(groups, alertOnGroupChange = true) {
     var selectedGroup = G.queryGroupSelected();
+    var selectedGroupChanged = false;
     
     // if selected group is not in the new list of groups, set a new group
     // as selected
@@ -134,15 +136,22 @@ G.updateSidebar = function(groups) {
     });
 
     if(!selectedGroupInArray) {
-      alert("We're sorry, the group you were viewing is no longer available :(");
+      if(alertOnGroupChange) {
+        alert("We're sorry, the group you were viewing is no longer available :(");
+      }
       if(groups.length > 0) {
         groups[0].selected = true;
+        selectedGroup = groups[0];
+        selectedGroupChanged = true;
       }
     }
 
     // Now update the new group list.
     var groupList = document.querySelector('.fc-group-list');
     groupList.innerHTML = G.makeGroupList(groups).innerHTML;
+    if(selectedGroupChanged) {
+      G.setGroupAsSelected(selectedGroup.name);
+    }
 };
 
 /**
