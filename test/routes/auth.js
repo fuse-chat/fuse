@@ -4,7 +4,6 @@ var chai = require('chai');
 var should = chai.should;
 var expect = chai.expect;
 const mongo = require('mongoskin');
-const jquery = require('jquery');
 const db = mongo.db('mongodb://localhost:27017/fuse');
 const groupsdb = db.collection('groups');
 const usersdb = db.collection('user');
