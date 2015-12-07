@@ -29,7 +29,7 @@ module.exports = function() {
             
             if (targetTime > MillisecondsInOneDay) {
                 (function(group) {
-                    database.deleteGroupById({id: group.id}, function(err, res) {
+                    database.deleteGroupById(group.id, function(err, res) {
                         if (err) {
                             return;
                         }
