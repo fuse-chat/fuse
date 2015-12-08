@@ -119,7 +119,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     'clientID'      : '403805483120-n9nfegk2jgdget7r6svcmahas1fqkjtr.apps.googleusercontent.com',
     'clientSecret'  : 'mvpV2F8ooNA8RH9dlVQYYVxz',
-    'callbackURL'   : 'http://localhost:3000/auth/google/callback'
+    'callbackURL'   : 'hhttp://159.203.96.164/auth/google/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
