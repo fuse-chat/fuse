@@ -1,5 +1,7 @@
 # fuse
 
+> Important note: This application is not meant for public use. The URL the app is hosted at does not use HTTPS. 
+
 Geolocation + group based chat
 
 [![Build Status](https://travis-ci.org/fuse-chat/fuse.svg?branch=master)](https://travis-ci.org/fuse-chat/fuse)
