@@ -89,3 +89,7 @@ $ node ./selenium/app-interaction.js
 * Run `npm install` and `bower install` to install dependencies (please do this regularly)
 * Run nodemon with the harmony flag (allows ES6 features) `nodemon --harmony app.js` to start the server locally!
 * Visit `localhost:3000` in your browser
+
+# License
+
+MIT. See the LICENSE file in the repository for more details.
